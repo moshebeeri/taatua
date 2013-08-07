@@ -9,9 +9,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-  <groupId>com.beeri</groupId>
   <artifactId>vidadtag</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
 
   <name>Camel Web Application</name>
   <description>Camel project that deploys the Camel routes as a WAR</description>
