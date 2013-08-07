@@ -23,7 +23,13 @@
   </properties>
 
   <dependencies>
-
+	<!-- Vidad Dependencies -->
+    <dependency>
+      <groupId>com.beeri</groupId>
+      <artifactId>vidadtools</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+	
     <!-- Camel Dependencies -->
     <dependency>
       <groupId>org.apache.camel</groupId>
