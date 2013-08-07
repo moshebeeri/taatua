@@ -7,9 +7,7 @@
     <artifactId>vidad</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>com.beeri</groupId>
   <artifactId>vidtagger</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>vidtagger Maven Webapp</name>
   <url>http://maven.apache.org</url>
