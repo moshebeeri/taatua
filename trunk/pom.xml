@@ -6,9 +6,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
-    <module>flow</module>
-    <module>vidtagger</module>
-    <module>vidcloud</module>
+    <module>vidadcloud</module>
     <module>vidadserver</module>
     <module>vidadtools</module>
     <module>vidadtag</module>
