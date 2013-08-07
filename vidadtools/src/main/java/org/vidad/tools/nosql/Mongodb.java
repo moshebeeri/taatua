@@ -116,7 +116,7 @@ public class Mongodb {
 		collections = new HashMap<String, DBCollection>();
 
 		for (Collection c : Collection.all()) {
-			String collectionName = c.getName();
+			String collectionName = c.name();
 			DBCollection collection = db.getCollection(collectionName);
 			collections.put(collectionName, collection);
 			// keep for example
@@ -171,9 +171,8 @@ public class Mongodb {
 	 * @throws ClassNotFoundException
 	 */
 	public <T extends Collectionable<?>> T getCollectionable(ObjectId id,
-			Collection collection, Class<T> clazz)
-			throws ClassNotFoundException {
-		return getObject(id, collections.get(collection.getName()), clazz);
+			Collection collection, Class<T> clazz) {
+		return getObject(id, collections.get(collection.name()), clazz);
 	}
 
 	/**
@@ -181,12 +180,10 @@ public class Mongodb {
 	 * @param collection
 	 * @param clazz
 	 * @return
-	 * @throws ClassNotFoundException
 	 */
 	public <T extends Collectionable<?>> List<T> getAllCollectionable(
-			Collection collection, Class<T> clazz)
-			throws ClassNotFoundException {
-		return getAllObjects(collections.get(collection.getName()), clazz);
+			Collection collection, Class<T> clazz) {
+		return getAllObjects(collections.get(collection.name()), clazz);
 	}
 
 	/**
@@ -194,26 +191,21 @@ public class Mongodb {
 	 * @param collection
 	 * @param clazz
 	 * @return
-	 * @throws ClassNotFoundException
 	 */
 	public <T extends Collectionable<?>> List<T> getFromTimeCollectionable(
-			DateTime from, Collection collection, Class<T> clazz)
-			throws ClassNotFoundException {
+			DateTime from, Collection collection, Class<T> clazz) {
 		return queryObjectsFromTime(from,
-				collections.get(collection.getName()), clazz);
+				collections.get(collection.name()), clazz);
 	}
 
 	/**
 	 * @param collectionable
 	 * @param collection
 	 * @return
-	 * @throws IOException
-	 * @throws ClassNotFoundException 
 	 */
-	public ObjectId insertCollectionable(Collectionable<?> collectionable)
-			throws IOException, ClassNotFoundException {
+	public ObjectId insertCollectionable(Collectionable<?> collectionable) {
 		ObjectId id =  insertObjectToCollection(
-						collections.get(collectionable.getCollection().getName()),
+						collections.get(collectionable.getCollection().name()),
 						collectionable);
 		//Save object id 
 		collectionable.setObjectId(id);
@@ -224,36 +216,28 @@ public class Mongodb {
 	/**
 	 * @param collectionable
 	 * @return
-	 * @throws IOException
-	 * @throws ClassNotFoundException
 	 */
-	public ObjectId updateCollectionable(Collectionable<?> collectionable)
-			throws IOException, ClassNotFoundException {
+	public ObjectId updateCollectionable(Collectionable<?> collectionable) {
 		return updateObjectToCollection(
-				collections.get(collectionable.getCollection().getName()),
+				collections.get(collectionable.getCollection().name()),
 				collectionable.getObjectId(), collectionable);
 	}
 
 	/**
 	 * @param collectionable
 	 * @throws IOException
-	 * @throws ClassNotFoundException
 	 */
 	public <T extends Collectionable<?>> T deleteCollectionable(ObjectId id,
-			Collection collection, Class<T> clazz) throws IOException,
-			ClassNotFoundException {
-		return deleteObject(id, collections.get(collection.getName()), clazz);
+			Collection collection, Class<T> clazz) {
+		return deleteObject(id, collections.get(collection.name()), clazz);
 	}
 
 	/**
 	 * @param collectionable
-	 * @throws IOException
-	 * @throws ClassNotFoundException
 	 */
 	public <T extends Collectionable<?>> List<T> queryCollectionable(
-			String path, String value, Collection collection, Class<T> clazz)
-			throws IOException, ClassNotFoundException {
-		return queryObjects(path, value, collections.get(collection.getName()),
+			String path, String value, Collection collection, Class<T> clazz) {
+		return queryObjects(path, value, collections.get(collection.name()),
 				clazz);
 	}
 
@@ -290,19 +274,12 @@ public class Mongodb {
 	 * @param _id
 	 * @param jsnoStrem
 	 * @return
-	 * @throws ClassNotFoundException
 	 */
 	private ObjectId updateObjectToCollection(DBCollection collection,
-			ObjectId _id, Collectionable<?> jsnoStrem)
-			throws ClassNotFoundException {
+			ObjectId _id, Collectionable<?> jsnoStrem){
 		BasicDBObject query = new BasicDBObject();
 		query.put("_id", _id);
 		DBObject dbo = (DBObject) JSON.parse(jsnoStrem.toJson());
-		if (dbo == null)
-			throw new ClassNotFoundException("class _id " + gson.toJson(_id)
-					+ " could not be found in " + db.getName() + "."
-					+ collection.getName());
-
 		BasicDBObject obj = new BasicDBObject(jsnoStrem.getClass()
 				.getSimpleName().toLowerCase(), dbo);
 		collection.update(query, obj);
@@ -310,24 +287,9 @@ public class Mongodb {
 	}
 
 	/**
-	 * @param _id
 	 * @param collection
 	 * @param clazz
 	 * @return
-	 * @throws ClassNotFoundException
-	 */
-	public <T extends Collectionable<?>> T getObject(ObjectId _id,
-			Collection collection, Class<T> clazz)
-			throws ClassNotFoundException {
-		return getObject(_id, collections.get(Collection.LAYOUT.getName()),
-				clazz);
-	}
-
-	/**
-	 * @param collection
-	 * @param clazz
-	 * @return
-	 * @throws ClassNotFoundException
 	 */
 	public <T extends Collectionable<?>> List<T> getAllObjects(
 			DBCollection collection, Class<T> clazz){
@@ -348,8 +310,6 @@ public class Mongodb {
 	 * @param _id
 	 * @param collection
 	 * @param clazz
-	 * @return
-	 * @throws ClassNotFoundException
 	 */
 	public <T extends Collectionable<?>> T getObject(ObjectId _id,
 			DBCollection collection, Class<T> clazz) {
@@ -405,7 +365,7 @@ public class Mongodb {
 	 */
 	public <T extends Collectionable<?>> List<T> queryObjects(
 			Collection collection, Class<T> clazz, BasicDBObject query) {
-		return queryObjects(collections.get(collection.getName()),clazz, query);
+		return queryObjects(collections.get(collection.name()),clazz, query);
 				
 	}
 	
@@ -471,68 +431,6 @@ public class Mongodb {
 
 	/**
 	 * @param in
-	 * @param filename
-	 * @return
-	 */
-	public ObjectId insertOriginalFile(InputStream in, String name) {
-		String collectionName = Collection.ORIGINAL.getName();
-		log.info("insertOriginalFile " + "name: " + name + "to collection: "
-				+ collectionName);
-		return insertStreamToCollection(in, name, collectionName);
-	}
-
-	/**
-	 * @param in
-	 * @param filename
-	 * @return
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-	public OutputStream getOriginalFile(ObjectId _id, OutputStream out)
-			throws IOException, ClassNotFoundException {
-		String collectionName = Collection.ORIGINAL.getName();
-		log.info("getOriginalFile " + "_id: " + _id + " from collection: "
-				+ collectionName);
-		return getStreamFromCollection(_id, out, collectionName);
-	}
-
-	/**
-	 * @param _id
-	 */
-	public void deleteOriginalFile(ObjectId _id) {
-		String collectionName = Collection.ORIGINAL.getName();
-		deleteStreamFromCollection(_id, collectionName);
-	}
-
-	/**
-	 * @param in
-	 * @param filename
-	 * @return
-	 */
-	public ObjectId insertPageFile(InputStream in, String name) {
-		String collectionName = Collection.PAGE.getName();
-		log.info("insertPageFile " + "name: " + name + " into collection: "
-				+ collectionName);
-		return insertStreamToCollection(in, name, collectionName);
-	}
-
-	/**
-	 * @param in
-	 * @param filename
-	 * @return
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-	public OutputStream getPageFile(ObjectId _id, OutputStream out)
-			throws IOException, ClassNotFoundException {
-		String collectionName = Collection.PAGE.getName();
-		log.info("getPageFile " + "_id: " + _id + " from collection: "
-				+ collectionName);
-		return getStreamFromCollection(_id, out, collectionName);
-	}
-
-	/**
-	 * @param in
 	 * @param name
 	 * @param collectionName
 	 * @return
@@ -551,13 +449,16 @@ public class Mongodb {
 	 * @param out
 	 * @param collectionName
 	 * @return
-	 * @throws IOException
-	 * @throws ClassNotFoundException
 	 */
 	public OutputStream getStreamFromCollection(ObjectId _id, OutputStream out,
-			String collectionName) throws IOException, ClassNotFoundException {
+			String collectionName)  {
 		GridFSDBFile imageForOutput = getGridFSDBFile(_id, collectionName);
-		imageForOutput.writeTo(out);
+		try {
+			imageForOutput.writeTo(out);
+		} catch (IOException e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+		}
 		return out;
 	}
 
@@ -565,19 +466,13 @@ public class Mongodb {
 	 * @param _id
 	 * @param collectionName
 	 * @return
-	 * @throws ClassNotFoundException
 	 */
-	public GridFSDBFile getGridFSDBFile(ObjectId _id, String collectionName)
-			throws ClassNotFoundException {
+	public GridFSDBFile getGridFSDBFile(ObjectId _id, String collectionName) {
 		BasicDBObject query = new BasicDBObject();
 		query.put("_id", _id);
 
 		GridFS gfs = new GridFS(db, collectionName);
 		GridFSDBFile imageForOutput = gfs.findOne(query);
-		if (imageForOutput == null)
-			throw new ClassNotFoundException("class _id " + gson.toJson(_id)
-					+ " could not be found in " + db.getName() + "."
-					+ collectionName);
 		return imageForOutput;
 	}
 
@@ -594,6 +489,6 @@ public class Mongodb {
 	 * @param unittest
 	 */
 	public void dropCollection(Collection collection) {
-		collections.get(collection.getName()).drop();
+		collections.get(collection.name()).drop();
 	}
 }
