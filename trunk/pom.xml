@@ -10,5 +10,6 @@
     <module>vidtagger</module>
     <module>vidcloud</module>
     <module>vidadserver</module>
+    <module>vidadtools</module>
   </modules>
 </project>
