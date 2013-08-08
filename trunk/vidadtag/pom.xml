@@ -26,8 +26,9 @@
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>vidadtools</artifactId>
-     <version>${project.version}</version> 
-    </dependency>      
+    </dependency>
+      
+      
     <!-- Camel Dependencies -->
     <dependency>
       <groupId>org.apache.camel</groupId>
@@ -55,8 +56,19 @@
 	<dependency>
 		<groupId>com.sun.jersey</groupId>
 		<artifactId>jersey-server</artifactId>
-		<version>1.8</version>
+		<version>1.17.1</version>
 	</dependency>
+	<dependency>
+		<groupId>com.sun.jersey.contribs</groupId>
+		<artifactId>jersey-multipart</artifactId>
+		<version>1.17.1</version>
+	</dependency>		
+	<dependency>
+		<groupId>com.sun.jersey</groupId>
+		<artifactId>jersey-bundle</artifactId>
+		<version>1.17.1</version>
+	</dependency>    
+
     
     <!-- logging -->
     <dependency>
@@ -129,4 +141,13 @@
     </plugins>
   </build>
 
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>${project.groupId}</groupId>
+  			<artifactId>vidadtools</artifactId>
+  			<version>${project.version}</version>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
 </project>
