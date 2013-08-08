@@ -24,11 +24,6 @@
 
   <dependencies>
 	<!-- Vidad Dependencies -->
-    <dependency>
-      <groupId>com.beeri</groupId>
-      <artifactId>vidadtools</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
 	
     <!-- Camel Dependencies -->
     <dependency>
@@ -125,4 +120,13 @@
     </plugins>
   </build>
 
+  <dependencyManagement>
+  	<dependencies>
+  		<dependency>
+  			<groupId>${project.groupId}</groupId>
+  			<artifactId>vidadtools</artifactId>
+  			<version>${project.version}</version>
+  		</dependency>
+  	</dependencies>
+  </dependencyManagement>
 </project>
