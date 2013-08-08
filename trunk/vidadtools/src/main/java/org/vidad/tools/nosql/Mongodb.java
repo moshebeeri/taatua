@@ -62,7 +62,7 @@ public class Mongodb {
 
 	private volatile static Mongodb instance;
 
-	public static Mongodb getInstance() throws Exception {
+	public static Mongodb getInstance() {
 		if (instance == null) {
 			synchronized (Mongodb.class) {
 				if (instance == null) {
@@ -78,49 +78,53 @@ public class Mongodb {
 	 * @param type
 	 * @throws Exception
 	 */
-	private Mongodb() throws Exception {
+	private Mongodb() {
 		initialize();
 	}
 
 	/**
 	 * @throws Exception
 	 */
-	private void initialize() throws Exception {
-		environment = getEnvironmentInstance();
-		if (environment == null)
-			throw new IOException("no environment found");
-
-		mongoConfig = environment.getMongoConfig();
-		String activeTenantName = Configure.settings().getString("active.tenant");
-		String dbName = mongoConfig.isTenanted()? activeTenantName + "_" + mongoConfig.getDbName() : mongoConfig.getDbName();
-
-		if (mongoConfig.isAuthenticate()) {
-			MongoCredential credential = MongoCredential
-					.createMongoCRCredential(mongoConfig.getAdminUser(),
-							"admin", mongoConfig.getAdminPassword()
-									.toCharArray());
-			mongo = new MongoClient(new ServerAddress(mongoConfig.getHost()),
-					Arrays.asList(credential));
-		} else
-			mongo = new MongoClient(mongoConfig.getHost());
-
-		List<String> databaseNames = mongo.getDatabaseNames();
-		Set<String> dbsSet = new HashSet<String>(databaseNames);
-		if (dbsSet.contains(dbName)) {
-			db = mongo.getDB(dbName);
-			authenticateUserIfNeeded(dbName);
-		} else {
-			db = createDB(dbName);
-		}
-
-		collections = new HashMap<String, DBCollection>();
-
-		for (Collection c : Collection.all()) {
-			String collectionName = c.name();
-			DBCollection collection = db.getCollection(collectionName);
-			collections.put(collectionName, collection);
-			// keep for example
-			// collection.ensureIndex(new BasicDBObject("context.type", 1));
+	private void initialize() {
+		try{
+			environment = getEnvironmentInstance();
+			if (environment == null)
+				throw new IOException("no environment found");
+	
+			mongoConfig = environment.getMongoConfig();
+			String activeTenantName = Configure.settings().getString("active.tenant");
+			String dbName = mongoConfig.isTenanted()? activeTenantName + "_" + mongoConfig.getDbName() : mongoConfig.getDbName();
+	
+			if (mongoConfig.isAuthenticate()) {
+				MongoCredential credential = MongoCredential
+						.createMongoCRCredential(mongoConfig.getAdminUser(),
+								"admin", mongoConfig.getAdminPassword()
+										.toCharArray());
+				mongo = new MongoClient(new ServerAddress(mongoConfig.getHost()),
+						Arrays.asList(credential));
+			} else
+				mongo = new MongoClient(mongoConfig.getHost());
+	
+			List<String> databaseNames = mongo.getDatabaseNames();
+			Set<String> dbsSet = new HashSet<String>(databaseNames);
+			if (dbsSet.contains(dbName)) {
+				db = mongo.getDB(dbName);
+				authenticateUserIfNeeded(dbName);
+			} else {
+				db = createDB(dbName);
+			}
+	
+			collections = new HashMap<String, DBCollection>();
+	
+			for (Collection c : Collection.all()) {
+				String collectionName = c.name();
+				DBCollection collection = db.getCollection(collectionName);
+				collections.put(collectionName, collection);
+				// keep for example
+				// collection.ensureIndex(new BasicDBObject("context.type", 1));
+			}
+		}catch(Exception e){
+		
 		}
 	}
 

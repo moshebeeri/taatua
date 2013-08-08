@@ -36,7 +36,7 @@ public class MongoRestService<T extends Collectionable<T>> extends RestService<T
 	 * @throws Exception 
 	 * 
 	 */
-	public MongoRestService() throws Exception {
+	public MongoRestService() {
 		this(Mongodb.getInstance());
 	}
 
@@ -44,7 +44,7 @@ public class MongoRestService<T extends Collectionable<T>> extends RestService<T
 	 * @param mongo
 	 * @throws Exception
 	 */
-	public MongoRestService(Mongodb mongo) throws Exception {
+	public MongoRestService(Mongodb mongo) {
 		super(mongo);
 		this.mongo = mongo;
 	}

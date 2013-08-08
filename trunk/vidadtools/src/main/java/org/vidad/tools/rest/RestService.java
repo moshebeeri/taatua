@@ -52,7 +52,7 @@ public abstract class RestService<T> {
 	 * @throws Exception 
 	 * 
 	 */
-	public RestService() throws Exception {
+	public RestService() {
 		mongo = Mongodb.getInstance();
 	}
 	
@@ -60,7 +60,7 @@ public abstract class RestService<T> {
 	 * @param mongo
 	 * @throws Exception
 	 */
-	public RestService(Mongodb mongo) throws Exception {
+	public RestService(Mongodb mongo) {
 		this.mongo = mongo;
 	}
 	
