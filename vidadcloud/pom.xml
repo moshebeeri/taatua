@@ -5,7 +5,7 @@
 
   <parent>
         <artifactId>vidad</artifactId>
-        <groupId>com.beeri</groupId>
+        <groupId>org.vidad</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
