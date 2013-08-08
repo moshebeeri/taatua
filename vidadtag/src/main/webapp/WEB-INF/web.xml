@@ -16,4 +16,29 @@
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
 
+	<!-- REST -->
+	<servlet>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>org.vidad.service</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Jersey Web Application</servlet-name>
+		<url-pattern>/r/*</url-pattern>
+	</servlet-mapping>	
+
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+    
+    
+    
 </web-app>

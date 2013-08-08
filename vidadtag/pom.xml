@@ -5,7 +5,7 @@
 
   <parent>
         <artifactId>vidad</artifactId>
-        <groupId>com.beeri</groupId>
+        <groupId>org.vidad</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -23,7 +23,11 @@
   </properties>
 
   <dependencies>
-
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>vidadtools</artifactId>
+     <version>${project.version}</version> 
+    </dependency>      
     <!-- Camel Dependencies -->
     <dependency>
       <groupId>org.apache.camel</groupId>
@@ -48,6 +52,12 @@
       <version>3.1.4.RELEASE</version>
     </dependency>
 
+	<dependency>
+		<groupId>com.sun.jersey</groupId>
+		<artifactId>jersey-server</artifactId>
+		<version>1.8</version>
+	</dependency>
+    
     <!-- logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
