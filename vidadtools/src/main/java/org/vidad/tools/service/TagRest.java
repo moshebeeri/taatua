@@ -3,7 +3,7 @@
  * Aug 8, 2013
  * org.vidad.service
  */
-package org.vidad.service;
+package org.vidad.tools.service;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;

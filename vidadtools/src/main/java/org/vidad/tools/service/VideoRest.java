@@ -3,7 +3,7 @@
  * Aug 7, 2013
  * org.vidad.service
  */
-package org.vidad.service;
+package org.vidad.tools.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
