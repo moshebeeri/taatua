@@ -18,8 +18,11 @@ import org.vidad.tools.conf.Collection;
 public class Tag extends Collectionable<Tag>{
 	transient Logger log = Logger.getLogger(Tag.class);
 	Date 		creationDate;
-	String		taxonomy;
-	ObjectId	parentId;
+	String		taxonomyName;
+	ObjectId	taxonomyId;
+	double		timeFromStart;
+	ObjectId	videoId;
+	
 	
 	/**
 	 * @return
