@@ -13,6 +13,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 
 import org.apache.log4j.Logger;
 import org.vidad.data.Tag;
+import org.vidad.tools.nosql.Mongodb;
 
 /**
  * @author Moshe Beeri
@@ -20,24 +21,38 @@ import org.vidad.data.Tag;
  */
 @ManagedBean	
 @SessionScoped
-public class VidoeTagCollector  extends Tag implements Serializable{
+public class VidoeTagCollector  implements Serializable{
 	/**
 	 * serialVersionUID -
 	 */
 	private static final long serialVersionUID = -5849533532636382036L;
-	Logger log = Logger.getLogger(VidoeTagCollector.class);
+	transient Logger log = Logger.getLogger(VidoeTagCollector.class);
+	Mongodb mongo;
+	
 	boolean initial = true;
 	String status="";
 	String taxonomy="";
+	double videoTimeStamp=0d;
+	
+	public VidoeTagCollector() {
+		super();
+		mongo = Mongodb.getInstance();
+	}
+
+	protected void insertTag(){
+		Tag tag = new Tag(taxonomy, taxonomy, videoTimeStamp, "");
+		mongo.insertCollectionable(tag);		
+	}
 	
 	public void addX(AjaxBehaviorEvent e){
 		add();	
 	}
 	
 	public String add(){
-		log.info("taxonomy: "+taxonomy +" added");
+		String messge = "tag created for taxonomy: "+taxonomy +" at video time: " + videoTimeStamp;
+		log.info(messge);
 		initial=false;
-		status = taxonomy + " added"; 
+		status = messge;
 		return "added";
 	}
 	
@@ -85,6 +100,14 @@ public class VidoeTagCollector  extends Tag implements Serializable{
 	 */
 	public void setTaxonomy(String taxonomy) {
 		this.taxonomy = taxonomy;
+	}
+
+	public double getVideoTimeStamp() {
+		return videoTimeStamp;
+	}
+
+	public void setVideoTimeStamp(double videoTimeStamp) {
+		this.videoTimeStamp = videoTimeStamp;
 	}
 
 }

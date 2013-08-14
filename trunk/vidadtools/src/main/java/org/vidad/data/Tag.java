@@ -9,6 +9,7 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
+import org.joda.time.DateTime;
 import org.vidad.tools.conf.Collection;
 
 /**
@@ -24,6 +25,17 @@ public class Tag extends Collectionable<Tag>{
 	ObjectId	videoId;
 	
 	
+	public Tag(String taxonomyName, String taxonomyId, double timeFromStart,
+			String videoId) {
+		super();
+		creationDate = new DateTime().toDate();
+		this.taxonomyName = taxonomyName;
+		this.taxonomyId = null;//new ObjectId(taxonomyId);
+		this.timeFromStart = timeFromStart;
+		this.videoId = null;//new ObjectId(videoId);
+	}
+
+
 	/**
 	 * @return
 	 * @see org.vidad.data.Collectionable#getCollection()

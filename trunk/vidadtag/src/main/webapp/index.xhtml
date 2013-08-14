@@ -5,6 +5,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>  
 	<script src="js/vidadtag.js" />
 	<script type="text/javascript">
 		function pause() {
@@ -14,6 +15,12 @@
 			vid.play();
 
 		}
+		function setVideoTimeStampToTagForm(){
+			var vid = document.getElementById("myvid");
+			var edit = document.getElementById("j_idt7:videoTimeStamp");
+			edit.value = vid.currentTime;
+		}
+				
 	</script>
 </h:head>
 
@@ -24,7 +31,7 @@
 		<source src="movie.mp4" type="video/mp4"></source>
 		<source src="movie.ogg" type="video/ogg"></source>
 		<source src="movie.webm" type="video/webm"></source>
-		Your browser does not support the video tag.
+		<!-- Your browser does not support the video tag. -->
 	</video>
 	<br />
 	<button onclick="pause()">click me</button>
@@ -33,14 +40,14 @@
 	<f:view>
 		<h:form>
 			<h:panelGrid columns="2">
-				<h:inputText id="vidoeTagCollector"	value="#{vidoeTagCollector.taxonomy}">
-				</h:inputText>
+				<h:outputLabel value="taxonomy"/><h:inputText id="taxonomy"			value="#{vidoeTagCollector.taxonomy}"/>
+				<h:inputHidden id="videoTimeStamp"	value="#{vidoeTagCollector.videoTimeStamp}"/>
 			</h:panelGrid>
-			<h:commandButton value="Add" >
- 				<f:ajax event="click" listener="#{vidoeTagCollector.addX}" execute="@form" />
+			<h:commandButton value="Add" onclick="setVideoTimeStampToTagForm()" >
+ 				<f:ajax event="click" listener="#{vidoeTagCollector.addX}" execute="@form" render=":status"/>
 			</h:commandButton>
 		</h:form>
-		<h:panelGroup rendered="#{vidoeTagCollector.initial!=true}">
+		<h:panelGroup id="status" rendered="#{vidoeTagCollector.initial!=true}">
 			<h3>Result</h3>
 			<h:outputLabel value="Status "></h:outputLabel>
 			<h:outputLabel value="#{vidoeTagCollector.status}"></h:outputLabel>
