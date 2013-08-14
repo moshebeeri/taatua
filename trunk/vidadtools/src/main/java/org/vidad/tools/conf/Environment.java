@@ -64,7 +64,7 @@ public class Environment {
 	 * @param xmlflie
 	 */
 	public void generateEmptyEnvironment(Serializer serializer, String xmlflie) {
-		MongoConfig.create();
+		mongoConfig = MongoConfig.create();
 		try {
 			serializer.write(this, new File(xmlflie));
 		} catch (Exception e) {
@@ -227,7 +227,7 @@ public class Environment {
 	
 	public static void main(String[] args) throws Exception {
 		Serializer serializer = new Persister();
-		String xmlflie = "/opt/orbograph/environment-new.xml";
+		String xmlflie = "/opt/vidad/environment-new.xml";
 		Environment e = new Environment();
 		e.generateEmptyEnvironment(serializer, xmlflie);
 //		e.writeAsJsonToFile(new FileWriter("/opt/orbograph/environment-json.xml"));

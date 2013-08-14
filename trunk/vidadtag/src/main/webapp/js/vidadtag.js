@@ -1,6 +1,0 @@
-
-
-
-function alertMoshe(){
-	alert('moshe');
-}

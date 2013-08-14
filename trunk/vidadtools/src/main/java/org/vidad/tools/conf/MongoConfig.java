@@ -52,7 +52,7 @@ public class MongoConfig implements Serializable{
 		return new MongoConfig("localhost",27017, true, true,
 				"admin","admin password",
 				"db user","db user password",
-				"orbograph");
+				"vidad");
 	}
 
 	public MongoConfig(	String host, int port, boolean authenticate,
