@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<script src="js/vidadtag.js" />
+	<script type="text/javascript">
+		function pause() {
+			var vid = document.getElementById("myvid");
+			vid.pause();
+			alert(vid.currentTime);
+			vid.play();
+
+		}
+	</script>
+</h:head>
+
+<h:body>
+	<h2>Vidadtag server is running</h2>
+	<br />
+	<video width="320" height="240" autoplay="autoplay" id="myvid">
+		<source src="movie.mp4" type="video/mp4"></source>
+		<source src="movie.ogg" type="video/ogg"></source>
+		<source src="movie.webm" type="video/webm"></source>
+		Your browser does not support the video tag.
+	</video>
+	<br />
+	<button onclick="pause()">click me</button>
+	<h:outputText value="insert tag here"></h:outputText>
+	
+	<f:view>
+		<h:form>
+			<h:panelGrid columns="2">
+				<h:inputText id="vidoeTagCollector"	value="#{vidoeTagCollector.taxonomy}">
+				</h:inputText>
+			</h:panelGrid>
+			<h:commandButton value="Add" >
+ 				<f:ajax event="click" listener="#{vidoeTagCollector.addX}" execute="@form" />
+			</h:commandButton>
+		</h:form>
+		<h:panelGroup rendered="#{vidoeTagCollector.initial!=true}">
+			<h3>Result</h3>
+			<h:outputLabel value="Status "></h:outputLabel>
+			<h:outputLabel value="#{vidoeTagCollector.status}"></h:outputLabel>
+		</h:panelGroup>
+	</f:view>
+</h:body>
+</html>
