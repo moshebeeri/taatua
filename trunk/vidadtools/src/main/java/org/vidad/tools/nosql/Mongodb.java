@@ -152,7 +152,7 @@ public class Mongodb {
 			String user = mongoConfig.getUser();
 			String password = mongoConfig.getPassword();
 			db.addUser(user, password.toCharArray());
-			log.info("creating tenanted DB " + dbName + "for " + user
+			log.info("creating tenanted DB " + dbName + " for " + user
 					+ "@" + mongoConfig.getHost() + " with password "
 					+ password);
 		}
