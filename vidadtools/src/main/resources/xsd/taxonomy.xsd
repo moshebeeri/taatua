@@ -1,0 +1,33 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="vocabulary">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:byte" name="vid"/>
+        <xs:element type="xs:string" name="name"/>
+        <xs:element type="xs:string" name="description"/>
+        <xs:element type="xs:string" name="help"/>
+        <xs:element type="xs:byte" name="relations"/>
+        <xs:element type="xs:byte" name="hierarchy"/>
+        <xs:element type="xs:byte" name="multiple"/>
+        <xs:element type="xs:byte" name="required"/>
+        <xs:element type="xs:byte" name="tags"/>
+        <xs:element type="xs:string" name="module"/>
+        <xs:element type="xs:byte" name="weight"/>
+        <xs:element type="xs:string" name="nodes"/>
+        <xs:element name="term" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:int" name="tid"/>
+              <xs:element type="xs:byte" name="vid"/>
+              <xs:element type="xs:string" name="name"/>
+              <xs:element type="xs:string" name="description"/>
+              <xs:element type="xs:byte" name="weight"/>
+              <xs:element type="xs:byte" name="depth"/>
+              <xs:element type="xs:int" name="parent"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
