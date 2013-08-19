@@ -189,7 +189,7 @@ public class Mongodb {
 			Collection collection, Class<T> clazz) {
 		return getAllObjects(collections.get(collection.name()), clazz);
 	}
-
+	
 	/**
 	 * @param id
 	 * @param collection
