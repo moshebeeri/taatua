@@ -6,13 +6,9 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.swing.text.html.parser.Entity;
 
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -32,19 +28,19 @@ public class GoogleTaxonomy {
 		String name;
 		String parentName;
 		ObjectId parentId = null;
-		Set<ObjectId> childs = new HashSet<ObjectId>(); 
+		List<ObjectId> childs = new ArrayList<ObjectId>(); 
 		transient Map<String, Taxonomy> childrenss = new HashMap<String, Taxonomy>();
 		
 		@Override
 		public Collection getCollection() {
-			return Collection.TEXANOMY;
+			return Collection.TAXANOMY;
 		}
 		
 		public Taxonomy chlidByName(String chlidname){
 			if(name==null)
 				throw new IllegalArgumentException("null name");
-			if( childrenss.containsKey(name))
-				return childrenss.get(name);
+			if(childrenss.containsKey(chlidname))
+				return childrenss.get(chlidname);
 			
 			Taxonomy t = new Taxonomy();
 			t.name=chlidname;
@@ -72,7 +68,7 @@ public class GoogleTaxonomy {
 		}
 	}
 	
-	public static void fromFile(File file) throws IOException {
+	public static Trie fromFile(File file) throws IOException {
 		Taxonomy root = new Taxonomy();
 		root.name="GoogleTaxonomy";
 		mongo.insertCollectionable(root);
@@ -92,17 +88,29 @@ public class GoogleTaxonomy {
 	    System.out.println(root.childrenss.size() + " top level categories " + root.childrenss.keySet());
 	    System.out.println(root.childs.size() + " id's ");
 	    System.out.println(all.size() + " all ");
-	    Trie trie = new Trie(Collection.TEXANOMY, root.getObjectId(), root.name);
+	    Trie trie = new Trie();//Collection.TEXANOMY, root.getObjectId(), root.name);
 	    for(Taxonomy t : all){
 	    	mongo.updateCollectionable(t);
-	    	trie.addWord(t.name);
+	    	trie.insert(t.name);
 	    }
 	    mongo.insertCollectionable(trie);
 	    reader.close();
-	    
+	    return trie;
 	}
 	
 	public static void main(String[] args) throws IOException {
-		GoogleTaxonomy.fromFile(Paths.get("/home/moshe/data/taxonomy/taxonomy.en-US-google.csv").toFile());
+		//Trie trie = GoogleTaxonomy.fromFile(Paths.get("/home/moshe/data/taxonomy/taxonomy.en-US-google.csv").toFile());
+		Trie trie = Mongodb.getInstance().getCollectionable(new ObjectId("52114db1b76049c312e819a1"), Collection.TRIE, Trie.class);
+		
+		String trieQuery = "";
+		do{
+			char c = (char) System.in.read();
+			if(c=='\n')
+				continue;
+			trieQuery+=c;
+			List<String> res = trie.search(trieQuery);
+			System.out.println(trieQuery + " result value="+res);
+
+		}while(true);
 	}
 }

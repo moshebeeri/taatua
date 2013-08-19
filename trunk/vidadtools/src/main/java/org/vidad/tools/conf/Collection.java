@@ -15,7 +15,7 @@ import java.util.Map;
  *
  */
 public enum Collection{
-	TAG, VIDEO, EXCEPTION, TRIE, TEXANOMY, 
+	TAG, VIDEO, EXCEPTION, TRIE, TAXANOMY, 
 	;
 	
 	static List<Collection> all = new ArrayList<Collection>();

@@ -428,7 +428,7 @@ public class Vocabulary {
         
 		@Override
 		public Collection getCollection() {
-			return Collection.TEXANOMY;
+			return Collection.TAXANOMY;
 		}
 		
 		public Texanomy(int tid, String name, String description, int weight,
