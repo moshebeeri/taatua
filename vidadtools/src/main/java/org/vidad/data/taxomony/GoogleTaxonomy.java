@@ -33,7 +33,7 @@ public class GoogleTaxonomy {
 		
 		@Override
 		public Collection getCollection() {
-			return Collection.TAXANOMY;
+			return Collection.TAXONOMY;
 		}
 		
 		public Taxonomy chlidByName(String chlidname){
@@ -99,18 +99,20 @@ public class GoogleTaxonomy {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		//Trie trie = GoogleTaxonomy.fromFile(Paths.get("/home/moshe/data/taxonomy/taxonomy.en-US-google.csv").toFile());
-		Trie trie = Mongodb.getInstance().getCollectionable(new ObjectId("52114db1b76049c312e819a1"), Collection.TRIE, Trie.class);
-		
-		String trieQuery = "";
-		do{
-			char c = (char) System.in.read();
-			if(c=='\n')
-				continue;
-			trieQuery+=c;
-			List<String> res = trie.search(trieQuery);
-			System.out.println(trieQuery + " result value="+res);
-
-		}while(true);
+		Mongodb.getInstance().dropCollection(Collection.TAXONOMY);
+		Mongodb.getInstance().dropCollection(Collection.TRIE);
+		Trie trie = GoogleTaxonomy.fromFile(Paths.get("/home/moshe/data/taxonomy/taxonomy.en-US-google.csv").toFile());
+//		Trie trie = Mongodb.getInstance().getCollectionable(new ObjectId("52114db1b76049c312e819a1"), Collection.TRIE, Trie.class);
+//		
+//		String trieQuery = "";
+//		do{
+//			char c = (char) System.in.read();
+//			if(c=='\n')
+//				continue;
+//			trieQuery+=c;
+//			List<String> res = trie.search(trieQuery);
+//			System.out.println(trieQuery + " result value="+res);
+//
+//		}while(true);
 	}
 }
