@@ -11,7 +11,24 @@
     <!--
         Simple camel route which send every one minute a message on the console.
     -->
-    <camelContext xmlns="http://camel.apache.org/schema/spring">
+
+   	<bean id="properties" class="org.apache.camel.component.properties.PropertiesComponent">
+    	<property name="location" value="classpath:settings.properties"/>
+	</bean>
+	 
+ 	<bean id="awsCredentials" class="com.amazonaws.auth.BasicAWSCredentials">
+		<constructor-arg value="1W635RJ28119X0X06J02" />
+		<constructor-arg value="DWovoClq4FVLL+9oLuMQi8ra/2epyKECgzb0jqQP" />
+	</bean>
+		<bean id="awsClientConfiguration" class="com.amazonaws.ClientConfiguration">
+	</bean>
+	
+	<bean id="sqsClient" class="com.amazonaws.services.sqs.AmazonSQSClient">
+		<constructor-arg ref="awsCredentials" />
+		<constructor-arg ref="awsClientConfiguration" />
+	</bean>
+
+<!--     <camelContext xmlns="http://camel.apache.org/schema/spring">
         <route id="timer-to-console">
             <from uri="timer://foo?fixedRate=true&amp;period=10s"/>
             <transform>
@@ -20,5 +37,5 @@
             <to uri="stream:out"/>
         </route>
     </camelContext>
-
+ -->
 </beans>
