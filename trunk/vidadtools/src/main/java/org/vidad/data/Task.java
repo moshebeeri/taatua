@@ -15,7 +15,15 @@ import org.bson.types.ObjectId;
 public class Task {
 	transient Logger log = Logger.getLogger(Task.class);
 	
+	ObjectId videoId;
 	ObjectId exceptionId;
+	
+	public Task(){}
+	
+	public Task(ObjectId videoId) {
+		super();
+		this.videoId = videoId;
+	}
 	/**
 	 * @return the exceptionId
 	 */

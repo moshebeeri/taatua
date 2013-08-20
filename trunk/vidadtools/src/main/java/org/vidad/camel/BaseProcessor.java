@@ -26,17 +26,26 @@ import com.google.gson.Gson;
 public abstract class BaseProcessor implements Processor {
 	protected Logger log;
 	protected Gson gson = new Gson();
-	protected Mongodb Mongodb;
+	protected Mongodb mongo;
 
 	/**
 	 * @param algorithmsProvider
-	 * @param Mongodb
+	 * @param mongo
 	 * @param logger 
 	 */
-	protected BaseProcessor(Mongodb Mongodb, Logger logger) {
+	protected BaseProcessor(Logger logger) {
+		this(Mongodb.getInstance(), logger );
+	}
+
+	/**
+	 * @param algorithmsProvider
+	 * @param mongo
+	 * @param logger 
+	 */
+	protected BaseProcessor(Mongodb mongodb, Logger logger) {
 		super();
 		this.log = logger;
-		this.Mongodb = Mongodb;
+		this.mongo = mongodb;
 	}
 
 	/**
@@ -46,8 +55,11 @@ public abstract class BaseProcessor implements Processor {
 	 * @throws Throwable 
 	 */
 	protected void handleThrowable(Class<? extends Processor> processor, Exchange exchange, Throwable t, Task task) {
-		
-
+		logThrowable(t);
+		if(task==null)
+			task = new Task();
+		FlowException fe = FlowException.create(t, processor, task);
+		handelFlowException(exchange, fe);
 	}
 	
 	/**
@@ -55,10 +67,8 @@ public abstract class BaseProcessor implements Processor {
 	 * @param e
 	 * @param task 
 	 */
-	protected void handleException(Class<? extends Processor> processor, Exchange exchange, Throwable t, Task task) {
-		logThrowable(t);
-		FlowException fe = FlowException.create(t, processor, task);
-		handelFlowException(exchange, fe);
+	protected void handleException(Class<? extends Processor> processor, Exchange exchange, Exception e, Task task) {
+		handleThrowable(processor, exchange, e, task);
 	}
 	
 	/**
@@ -87,7 +97,7 @@ public abstract class BaseProcessor implements Processor {
 	 */
 	protected void handelFlowException(Exchange exchange, FlowException fe){
 		Task task = fe.getFlowExceptionInfo().getTask();
-		ObjectId id = Mongodb.insertCollectionable(fe.getFlowExceptionInfo());
+		ObjectId id = mongo.insertCollectionable(fe.getFlowExceptionInfo());
 		task.setExceptionId(id);
 		log.error("Reporting FlowException recived from " + getClass().getSimpleName() + " meggage:" + fe.getMessage());
 		processFailure(exchange, task);

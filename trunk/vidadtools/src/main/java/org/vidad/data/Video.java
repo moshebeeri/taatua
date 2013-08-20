@@ -5,7 +5,10 @@
  */
 package org.vidad.data;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.vidad.tools.conf.Collection;
 
 /**
@@ -14,6 +17,25 @@ import org.vidad.tools.conf.Collection;
  */
 public class Video extends Collectionable<Video>{
 	transient Logger log = Logger.getLogger(Video.class);
+	
+	String	extension;
+	String	videoURL;
+	Date	receivedTime;
+	
+	
+	
+	/**
+	 * @param videoURL
+	 * @param extension
+	 */
+	public Video(String videoURL, String extension) {
+		super();
+		this.extension = extension;
+		this.videoURL = videoURL;
+		receivedTime = new DateTime().toDate();
+	}
+
+
 
 	/**
 	 * @return
