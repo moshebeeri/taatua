@@ -20,7 +20,10 @@
 			var edit = document.getElementById("j_idt7:videoTimeStamp");
 			edit.value = vid.currentTime;
 		}
-				
+		function addToTable(data){
+		     if (data.status == "success")
+		         alert(document.getElementById("fff:stateSelected"));  
+		}		
 	</script>
 </h:head>
 
@@ -49,8 +52,8 @@
 		</h:form>
 		<h:panelGroup id="status" rendered="#{vidoeTagCollector.initial!=true}">
 			<h3>Result</h3>
-			<h:outputLabel value="Status "></h:outputLabel>
-			<h:outputLabel value="#{vidoeTagCollector.status}"></h:outputLabel>
+			<h:outputLabel value="Status "/>
+			<h:outputLabel value="#{vidoeTagCollector.status}"/>
 		</h:panelGroup>
 	</f:view>
 </h:body>
