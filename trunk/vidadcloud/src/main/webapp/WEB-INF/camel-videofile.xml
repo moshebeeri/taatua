@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:camel="http://camel.apache.org/schema/spring"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-2.5.xsd
+    http://camel.apache.org/schema/spring
+    http://camel.apache.org/schema/spring/camel-spring.xsd">
+    
+	<bean id="VideoFeedProcesso" class="org.vidad.cloud.processor.VideoFeedProcessor"/>	
+  	<camelContext xmlns="http://camel.apache.org/schema/spring">
+		<!-- Landing zone -->
+		<route>
+     		<from uri="file://{{drive}}{{video.receiveURI}}/{{active.tenant}}"/>
+     		<!-- <from uri="ftp://localhost:21/in?username=ftptest&amp;password=ftptest"/> -->
+     		<process ref="LZProcessor"/>
+ 			<when>
+				<simple>${in.header.status} == 'exception'</simple>
+				<to uri="aws-sqs:{{active.tenant}}_Exception?amazonSQSClient=#sqsClient" />				
+			</when>
+ 			<when>
+				<simple>${in.header.status} == 'ok'</simple>
+ 				<to uri="aws-sqs:{{active.tenant}}_NewVideo?amazonSQSClient=#sqsClient" />
+     		</when>		
+		</route>		
+	</camelContext>    
+    
+  	<camelContext  id="videofile-store-context" xmlns="http://camel.apache.org/schema/spring">
+		<route>
+     		<from uri="direct:video_store"/>
+			<to uri="file://{{drive}}{{video.storeURI}}/{{active.tenant}}" />
+		</route>		
+	</camelContext>
+
+
+</beans>
+    
