@@ -18,14 +18,15 @@ import com.google.gson.Gson;
  *
  */
 public abstract class Collectionable<T> {
-	transient Gson gson = new Gson();
-	ObjectId objectId;
+	protected transient Gson gson = new Gson();
+	protected ObjectId objectId;
 	
 	abstract public Collection getCollection();
 	
 	public ObjectId getObjectId(){
 		return objectId;
 	}
+	
 	public void setObjectId(ObjectId id){
 		objectId = id;
 	}

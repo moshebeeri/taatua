@@ -2,11 +2,9 @@ package org.vidad.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.bson.types.ObjectId;
@@ -34,7 +32,12 @@ public class Trie extends Collectionable<Trie> {
     }
 
 
-    /**
+    public String getName() {
+		return name;
+	}
+
+
+	/**
      * Inserts the specified key into this Trie object.
      * @param key
      */
@@ -167,4 +170,6 @@ public class Trie extends Collectionable<Trie> {
 
         System.out.println(t.search("bhalblah"));
     }
+
+
 }
