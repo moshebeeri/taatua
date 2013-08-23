@@ -72,5 +72,12 @@
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
 
+	<!-- OpenFaces TODO:more params http://openfaces.org/documentation/developersGuide/installation-and-configuration.html#InstallationandConfiguration-Installation-->
+	<context-param>
+    	<param-name>org.openfaces.validation.clientValidation</param-name>
+    	<param-value>onSubmit</param-value>
+	</context-param>
+	
+
 </web-app>
  
