@@ -6,6 +6,8 @@
 package org.vidad.tag.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -31,8 +33,9 @@ public class VidoeTagCollector  implements Serializable{
 	
 	boolean initial = true;
 	String status="";
-	String taxonomy="";
+	String tagName="";
 	double videoTimeStamp=0d;
+	List<String> tags = new ArrayList<String>();
 	
 	public VidoeTagCollector() {
 		super();
@@ -40,24 +43,24 @@ public class VidoeTagCollector  implements Serializable{
 	}
 
 	protected void insertTag(){
-		Tag tag = new Tag(taxonomy, taxonomy, videoTimeStamp, "");
+		Tag tag = new Tag(tagName, tagName, videoTimeStamp, "");
 		mongo.insertCollectionable(tag);		
 	}
 	
-	public void addX(AjaxBehaviorEvent e){
-		add();	
-	}
-	
-	public String add(){
-		String messge = "tag created for taxonomy: "+taxonomy +" at video time: " + videoTimeStamp;
+	public void add(AjaxBehaviorEvent e){
+		log.info(e.getSource().toString());
+		String messge = "tag created for taxonomy: "+tagName +" at video time: " + videoTimeStamp;
 		log.info(messge);
 		initial=false;
 		status = messge;
-		return "added";
+		tags.add(tagName);
 	}
 	
-	public String reset(){
-		return "added";
+	public void reset(AjaxBehaviorEvent e){
+		status="";
+		tagName="";
+		videoTimeStamp=0d;
+		tags = new ArrayList<String>();
 	}
 
 	/**
@@ -88,18 +91,12 @@ public class VidoeTagCollector  implements Serializable{
 		this.status = status;
 	}
 
-	/**
-	 * @return the taxonomy
-	 */
-	public String getTaxonomy() {
-		return taxonomy;
+	public String getTagName() {
+		return tagName;
 	}
 
-	/**
-	 * @param taxonomy the taxonomy to set
-	 */
-	public void setTaxonomy(String taxonomy) {
-		this.taxonomy = taxonomy;
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
 	}
 
 	public double getVideoTimeStamp() {
@@ -108,6 +105,14 @@ public class VidoeTagCollector  implements Serializable{
 
 	public void setVideoTimeStamp(double videoTimeStamp) {
 		this.videoTimeStamp = videoTimeStamp;
+	}
+
+	public List<String> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<String> tags) {
+		this.tags = tags;
 	}
 
 }

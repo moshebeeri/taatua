@@ -2,52 +2,69 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:o="http://openfaces.org/"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>  
-	<script src="js/vidadtag.js" />
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"/>
+	<script type="text/javascript"  src="js/vidadtag.js" />
+	<script>
+		$(document).ready(function () {
+			//PrimeFaces.escapeClientId('#j_idt7:tag') == "#j_idt7\\:tag"
+			console.log("document ready function " + $("#j_idt7\\:tag").prop("tagName"));
+		    $("#j_idt7\\:tag").focus();
+		   });
+	</script>  
 	<script type="text/javascript">
-		function pause() {
-			var vid = document.getElementById("myvid");
-			vid.pause();
-			alert(vid.currentTime);
-			vid.play();
-
-		}
+		var paused = false;
 		function setVideoTimeStampToTagForm(){
 			var vid = document.getElementById("myvid");
 			var edit = document.getElementById("j_idt7:videoTimeStamp");
 			edit.value = vid.currentTime;
 		}
-		function addToTable(data){
-		     if (data.status == "success")
-		         alert(document.getElementById("fff:stateSelected"));  
-		}		
+		function videoClicked(){
+			var vid = document.getElementById("myvid");
+			if(!paused){				
+				vid.pause();
+				paused = true;
+				console.log("video paused at " + vid.currentTime)
+			}else{
+				vid.play();
+				paused = false;
+				console.log("video continuted at " + vid.currentTime)
+			}
+		}
+
 	</script>
 </h:head>
 
 <h:body>
 	<h2>Vidadtag server is running</h2>
-	<br />
-	<video width="320" height="240" autoplay="autoplay" id="myvid">
+	<br/>
+	<video width="320" height="240" autoplay="autoplay" id="myvid" onclick="videoClicked()">
 		<source src="movie.mp4" type="video/mp4"></source>
 		<source src="movie.ogg" type="video/ogg"></source>
 		<source src="movie.webm" type="video/webm"></source>
 		<!-- Your browser does not support the video tag. -->
 	</video>
-	<br />
-	<button onclick="pause()">click me</button>
+	<br/>
+	
 	<h:outputText value="insert tag here"></h:outputText>
 	
 	<f:view>
 		<h:form>
 			<h:panelGrid columns="2">
-				<h:outputLabel value="taxonomy"/><h:inputText id="taxonomy"			value="#{vidoeTagCollector.taxonomy}"/>
+				<h:outputLabel value="tag"/>
+				<o:inputText id="tag" value="#{vidoeTagCollector.tagName}" focusedStyle="background: Cornsilk"/>
 				<h:inputHidden id="videoTimeStamp"	value="#{vidoeTagCollector.videoTimeStamp}"/>
 			</h:panelGrid>
-			<h:commandButton value="Add" onclick="setVideoTimeStampToTagForm()" >
- 				<f:ajax event="click" listener="#{vidoeTagCollector.addX}" execute="@form" render=":status"/>
+			<h:commandButton id="addbutton" value="Add" onclick="setVideoTimeStampToTagForm()" >
+ 				<f:ajax event="click" listener="#{vidoeTagCollector.add}" execute="@form" render=":status :tags"/>
+			</h:commandButton>
+			<h:commandButton id="resetbutton" value="Reset">
+ 				<f:ajax event="click" listener="#{vidoeTagCollector.reset}" execute="@form" render=":status :tags"/>
+ 				<o:confirmation for="resetbutton"/>
+ 				
 			</h:commandButton>
 		</h:form>
 		<h:panelGroup id="status" rendered="#{vidoeTagCollector.initial!=true}">
@@ -55,6 +72,19 @@
 			<h:outputLabel value="Status "/>
 			<h:outputLabel value="#{vidoeTagCollector.status}"/>
 		</h:panelGroup>
+		<h:panelGroup id="tags" rendered="#{vidoeTagCollector.initial!=true}">
+			<o:dataTable value="#{vidoeTagCollector.tags}" var="tag">
+				<o:column>
+            		<h:outputText value="#{tag}" />
+        		</o:column>
+			</o:dataTable>
+		</h:panelGroup>
 	</f:view>
+	<h:form>
+		<o:inputText value="Test" 
+		          style="font-size: 14pt; background: silver"
+		rolloverStyle="background: yellow"		
+		focusedStyle="background: red"/>		
+	</h:form>
 </h:body>
 </html>
