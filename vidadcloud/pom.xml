@@ -47,6 +47,11 @@
 			<artifactId>camel-stream</artifactId>
 			<version>2.11.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.camel</groupId>
+			<artifactId>camel-aws</artifactId>
+			<version>${camel.version}</version>
+		</dependency>
 
 		<!-- Spring Web -->
 		<dependency>

@@ -8,6 +8,8 @@ package org.vidad.tools.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
+import java.security.MessageDigest;
 import java.util.Date;
 
 import javax.ws.rs.Consumes;
@@ -37,6 +39,7 @@ import com.google.gson.Gson;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
+
 import org.vidad.tools.conf.Collection;
 
 /**
@@ -53,7 +56,7 @@ public class VideoRest extends MongoRestService<Video>{
 	 * @throws Exception
 	 */
 	public VideoRest() {
-		super();
+		super(Video.class);
 		
 	}
 	Gson gson = new Gson();
@@ -95,7 +98,6 @@ public class VideoRest extends MongoRestService<Video>{
     	return Response.status(HttpStatus.SC_OK).entity(str).build();
     }
     
-  
     /**
      * @SEE http://stackoverflow.com/questions/9204287/how-to-return-a-png-image-from-jersey-rest-service-method-to-the-browser
      * @param objectIdJson
@@ -104,7 +106,61 @@ public class VideoRest extends MongoRestService<Video>{
      * @return
      * @throws WebApplicationException
      */
-    @Path("get/{collection}/{id}")
+    @Path("get/vid/{id}")
+    @GET
+    @Produces("video/mp4")
+    public Response getVideo(	@PathParam("id") String objectIdStr, 
+					            @Context Request request) throws WebApplicationException {
+        try {
+			Mongodb mongodb = Mongodb.getInstance();
+	        ObjectId objectId = new ObjectId(objectIdStr);
+	        Video video = mongodb.getCollectionable(objectId, Collection.VIDEO, Video.class);
+	        
+	        CacheControl cc = new CacheControl();
+	        cc.setNoTransform(true);
+	        cc.setMustRevalidate(false);
+	        cc.setNoCache(false);
+	        cc.setMaxAge(3600);
+	        
+			MessageDigest md5 = MessageDigest.getInstance("MD5");
+			String md5str = new String(md5.digest(video.getVideoURL().getBytes()));			
+	        EntityTag etag = new EntityTag(md5str);
+	        Date lastModified = video.getReceivedTime();
+	        String mime = "video/mp4";
+	        Date expirationTimestamp = new DateTime(lastModified).plusDays(1).toDate();
+	        
+	        Response.ResponseBuilder responseBuilder = request.evaluatePreconditions(lastModified, etag);
+	        if (responseBuilder != null) {
+	            // Preconditions are not met, returning HTTP 304 'not-modified'
+	            return responseBuilder
+	                    .cacheControl(cc)
+	                    .build();
+	        }
+	        Response response = Response
+	                .ok(Paths.get(video.getVideoURL()).toFile())
+	                .cacheControl(cc)
+	                .tag(etag)
+	                .lastModified(lastModified)
+	                .expires(expirationTimestamp)
+	                .type(mime)
+	                .build();
+	        return response;
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+			return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+		}
+    }
+    
+    /**
+     * @SEE http://stackoverflow.com/questions/9204287/how-to-return-a-png-image-from-jersey-rest-service-method-to-the-browser
+     * @param objectIdJson
+     * @param collection
+     * @param request
+     * @return
+     * @throws WebApplicationException
+     */
+    @Path("get/img/{collection}/{id}")
     @GET
     @Produces("image/png")
     public Response getImage(	@PathParam("collection") String collection,	

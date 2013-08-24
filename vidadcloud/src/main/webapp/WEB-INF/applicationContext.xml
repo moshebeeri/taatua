@@ -16,6 +16,7 @@
     	<property name="location" value="classpath:settings.properties"/>
 	</bean>
 	 
+	<bean id="springApplicationContext" class="org.vidad.spring.SpringApplicationContext"/>	 
  	<bean id="awsCredentials" class="com.amazonaws.auth.BasicAWSCredentials">
 		<constructor-arg value="1W635RJ28119X0X06J02" />
 		<constructor-arg value="DWovoClq4FVLL+9oLuMQi8ra/2epyKECgzb0jqQP" />

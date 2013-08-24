@@ -8,6 +8,7 @@ package org.vidad.tools.nosql;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,9 +49,10 @@ import com.mongodb.util.JSON;
  *         Byte[]{});
  * 
  */
-public class Mongodb {
-	Logger log = Logger.getLogger(Mongodb.class);
-	Gson gson = new Gson();
+public class Mongodb implements Serializable{
+	private static final long serialVersionUID = 672641262245906040L;
+	transient Logger log = Logger.getLogger(Mongodb.class);
+	transient Gson gson = new Gson();
 
 	Map<String, DBCollection> collections;
 

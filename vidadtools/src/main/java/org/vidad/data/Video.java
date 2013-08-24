@@ -5,6 +5,7 @@
  */
 package org.vidad.data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -15,7 +16,9 @@ import org.vidad.tools.conf.Collection;
  * @author Moshe Beeri
  *
  */
-public class Video extends Collectionable<Video>{
+public class Video extends Collectionable<Video> implements Serializable{
+	private static final long serialVersionUID = -2798571933254021201L;
+
 	transient Logger log = Logger.getLogger(Video.class);
 	
 	String	extension;
@@ -24,6 +27,10 @@ public class Video extends Collectionable<Video>{
 	
 	
 	
+	public Video() {
+		super();
+	}
+
 	/**
 	 * @param videoURL
 	 * @param extension
@@ -33,6 +40,36 @@ public class Video extends Collectionable<Video>{
 		this.extension = extension;
 		this.videoURL = videoURL;
 		receivedTime = new DateTime().toDate();
+	}
+
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+
+	public String getVideoURL() {
+		return videoURL;
+	}
+
+
+
+	public void setVideoURL(String videoURL) {
+		this.videoURL = videoURL;
+	}
+
+
+
+	public Date getReceivedTime() {
+		return receivedTime;
+	}
+
+
+
+	public void setReceivedTime(Date receivedTime) {
+		this.receivedTime = receivedTime;
 	}
 
 

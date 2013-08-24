@@ -22,7 +22,6 @@ import javax.ws.rs.core.UriInfo;
 
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.vidad.tools.nosql.Mongodb;
 
 import com.google.gson.Gson;
@@ -40,7 +39,7 @@ import com.google.gson.Gson;
 public abstract class RestService<T> {
 	protected transient Gson gson = new Gson();  
 	protected transient Logger log = Logger.getLogger(RestService.class);
-	@Autowired
+	protected transient Class<T> clazz;
 	protected transient Mongodb mongo;
 
 	@Context
@@ -52,8 +51,9 @@ public abstract class RestService<T> {
 	 * @throws Exception 
 	 * 
 	 */
-	public RestService() {
+	public RestService(Class<T> clazz) {
 		mongo = Mongodb.getInstance();
+		this.clazz = clazz;
 	}
 	
 	/**

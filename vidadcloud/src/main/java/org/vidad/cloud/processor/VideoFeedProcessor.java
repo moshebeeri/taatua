@@ -43,8 +43,9 @@ public class VideoFeedProcessor extends BaseProcessor {
 	
 	private Task createVideoTask(String filename) {
 		String storeURL = Configure.settings().getString("video.storeURI");
+		String tenant = Configure.settings().getString("active.tenant");
 		String extension = FilenameUtils.getExtension(filename);
-		String videoURL = storeURL+File.separatorChar+filename;
+		String videoURL = storeURL+File.separatorChar+tenant+File.separatorChar+filename;
 		Video video = new Video(videoURL, extension);
 		mongo.insertCollectionable(video);
 		return new Task(video.getObjectId());

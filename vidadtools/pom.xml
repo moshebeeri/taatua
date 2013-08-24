@@ -15,12 +15,25 @@
   <name>A Camel Spring Route</name>
   <url>http://www.myorganization.org</url>
 
+ <repositories>
+  <repository>
+   <id>xuggle repo</id>
+   <url>http://xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
+  </repository>
+ </repositories>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
 
   <dependencies>
+	<dependency>
+		<groupId>xuggle</groupId>
+		<artifactId>xuggle-xuggler</artifactId>
+		<version>5.2</version>
+	</dependency>
+
 	<!-- opencsv --> 
     <dependency>
 		<groupId>net.sf.opencsv</groupId>
