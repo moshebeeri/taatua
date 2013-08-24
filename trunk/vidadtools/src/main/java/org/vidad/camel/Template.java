@@ -7,9 +7,9 @@ import org.vidad.spring.SpringApplicationContext;
 
 public class Template {
 	
-	public static ProducerTemplate byId(String id ){
+	public static ProducerTemplate byId(String name ){
 		ApplicationContext springContext = SpringApplicationContext.getContext();
-		CamelContext context = (CamelContext) springContext.getBean("k1response-context");
+		CamelContext context = (CamelContext) springContext.getBean(name);
 		return context.createProducerTemplate();
 	}
 }

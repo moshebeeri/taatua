@@ -6,7 +6,6 @@
 package org.vidad.tools.rest;
 
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -31,21 +30,21 @@ import org.vidad.tools.nosql.Mongodb;
  */
 public class MongoRestService<T extends Collectionable<T>> extends RestService<T> {
 	Logger log = Logger.getLogger(MongoRestService.class);
-
 	/**
 	 * @throws Exception 
 	 * 
 	 */
-	public MongoRestService() {
-		this(Mongodb.getInstance());
+	public MongoRestService(Class<T> clazz) {
+		this(Mongodb.getInstance(), clazz);
 	}
 
 	/**
 	 * @param mongo
+	 * @param clazz 
 	 * @throws Exception
 	 */
-	public MongoRestService(Mongodb mongo) {
-		super(mongo);
+	public MongoRestService(Mongodb mongo, Class<T> clazz) {
+		super(clazz);
 		this.mongo = mongo;
 	}
 
@@ -104,10 +103,7 @@ public class MongoRestService<T extends Collectionable<T>> extends RestService<T
 	@Path("get/{id}")
 	@Produces("application/json")
 	public T read(@HeaderParam("key") String key, @PathParam("id") String id) throws ClassNotFoundException, InstantiationException, IllegalAccessException  {
-		@SuppressWarnings("unchecked")
-		Class<T> t = (Class<T>) ((ParameterizedType) getClass()
-                .getGenericSuperclass()).getActualTypeArguments()[0];
-		return mongo.getCollectionable(new ObjectId(id), t.newInstance().getCollection(), t);
+		return mongo.getCollectionable(new ObjectId(id), clazz.newInstance().getCollection(), clazz);
 	}
 
 	/**
@@ -123,13 +119,10 @@ public class MongoRestService<T extends Collectionable<T>> extends RestService<T
 	@GET
 	@Path("getall")
 	@Produces("application/json")
-	public List<T> readAll(@HeaderParam("key") String key) throws ClassNotFoundException, InstantiationException, IllegalAccessException  {
-		@SuppressWarnings("unchecked")
-		Class<T> t = (Class<T>) ((ParameterizedType) getClass()
-                .getGenericSuperclass()).getActualTypeArguments()[0];
-		return mongo.getAllCollectionable(t.newInstance().getCollection(), t);
+	public List<T> readAll(@HeaderParam("key") String key) throws InstantiationException, IllegalAccessException   {
+		return mongo.getAllCollectionable(clazz.newInstance().getCollection(), clazz);
 	}
-
+	
 	/**
 	 * @param key
 	 * @param timestamp - in milliseconds from 1/1/1970
@@ -144,11 +137,8 @@ public class MongoRestService<T extends Collectionable<T>> extends RestService<T
 	@Path("getfrom/{timestamp}")
 	@Produces("application/json")
 	public List<T> readFromTime(@HeaderParam("key") String key, @PathParam("timestamp") Long timestamp) throws ClassNotFoundException, InstantiationException, IllegalAccessException  {
-		@SuppressWarnings("unchecked")
-		Class<T> t = (Class<T>) ((ParameterizedType) getClass()
-                .getGenericSuperclass()).getActualTypeArguments()[0];
 		DateTime from = new DateTime(timestamp);
-		return mongo.getFromTimeCollectionable(from , t.newInstance().getCollection(), t);
+		return mongo.getFromTimeCollectionable(from , clazz.newInstance().getCollection(), clazz);
 	} 
 	
 	/**
@@ -178,9 +168,6 @@ public class MongoRestService<T extends Collectionable<T>> extends RestService<T
 	@Path("delete/{id}")
 	@Produces("application/json")
 	public T delete(@HeaderParam("key") String key, @PathParam("id") String id) throws ClassNotFoundException, InstantiationException, IllegalAccessException, IOException {
-		@SuppressWarnings("unchecked")
-		Class<T> t = (Class<T>) ((ParameterizedType) getClass()
-                .getGenericSuperclass()).getActualTypeArguments()[0];
-		return mongo.deleteCollectionable(new ObjectId(id), t.newInstance().getCollection(), t);
+		return mongo.deleteCollectionable(new ObjectId(id), clazz.newInstance().getCollection(), clazz);
 	}
 }

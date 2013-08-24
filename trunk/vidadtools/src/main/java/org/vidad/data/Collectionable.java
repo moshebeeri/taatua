@@ -26,7 +26,7 @@ public abstract class Collectionable<T> {
 	public ObjectId getObjectId(){
 		return objectId;
 	}
-	
+		
 	public void setObjectId(ObjectId id){
 		objectId = id;
 	}

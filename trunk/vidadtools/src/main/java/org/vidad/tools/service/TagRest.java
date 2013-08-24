@@ -23,4 +23,8 @@ import org.vidad.tools.rest.MongoRestService;
 @Produces("application/json")
 public class TagRest extends MongoRestService<Tag> {
 	Logger log = Logger.getLogger(TagRest.class);
+	
+	public TagRest() {
+		super(Tag.class);
+	}
 }

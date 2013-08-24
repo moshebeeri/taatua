@@ -23,13 +23,14 @@ import org.joda.time.DateTime;
 public class Test {
 	Logger log = Logger.getLogger(Test.class);
 	
-	
-	
+		public Test() {
+		super();
+	}
+
 	@GET
 	@Path("ping")
 	@Produces("text/html")
 	public String ping() {
 		return "Ping result at server time - " + new DateTime().toString();
 	}
-
 }

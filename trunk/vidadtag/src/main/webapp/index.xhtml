@@ -7,46 +7,10 @@
 
 <h:head>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"/>
-	<script type="text/javascript"  src="js/vidadtag.js" />
-	<script>
-		$(document).ready(function () {
-			//PrimeFaces.escapeClientId('#j_idt7:tag') == "#j_idt7\\:tag"
-			console.log("document ready function " + $("#j_idt7\\:tag").prop("tagName"));
-		    $("#j_idt7\\:tag").focus();
-		   });
-	</script>  
-	<script type="text/javascript">
-		var paused = false;
-		function setVideoTimeStampToTagForm(){
-			var vid = document.getElementById("myvid");
-			var edit = document.getElementById("j_idt7:videoTimeStamp");
-			edit.value = vid.currentTime;
-		}
-		function videoClicked(){
-			var vid = document.getElementById("myvid");
-			if(!paused){				
-				vid.pause();
-				paused = true;
-				console.log("video paused at " + vid.currentTime)
-			}else{
-				vid.play();
-				paused = false;
-				console.log("video continuted at " + vid.currentTime)
-			}
-		}
-
-	</script>
 </h:head>
 
 <h:body>
-	<h2>Vidadtag server is running</h2>
-	<br/>
-	<video width="320" height="240" autoplay="autoplay" id="myvid" onclick="videoClicked()">
-		<source src="movie.mp4" type="video/mp4"></source>
-		<source src="movie.ogg" type="video/ogg"></source>
-		<source src="movie.webm" type="video/webm"></source>
-		<!-- Your browser does not support the video tag. -->
-	</video>
+	<h2>Select video for tagging</h2>
 	<br/>
 	
 	<h:outputText value="insert tag here"></h:outputText>
@@ -54,37 +18,29 @@
 	<f:view>
 		<h:form>
 			<h:panelGrid columns="2">
-				<h:outputLabel value="tag"/>
-				<o:inputText id="tag" value="#{vidoeTagCollector.tagName}" focusedStyle="background: Cornsilk"/>
-				<h:inputHidden id="videoTimeStamp"	value="#{vidoeTagCollector.videoTimeStamp}"/>
+				<h:outputLabel value="duraion"/>
+				<o:inputText id="duraion" value="#{selectVideoToTag.duraion}" focusedStyle="background: Cornsilk"/>
 			</h:panelGrid>
-			<h:commandButton id="addbutton" value="Add" onclick="setVideoTimeStampToTagForm()" >
- 				<f:ajax event="click" listener="#{vidoeTagCollector.add}" execute="@form" render=":status :tags"/>
-			</h:commandButton>
-			<h:commandButton id="resetbutton" value="Reset">
- 				<f:ajax event="click" listener="#{vidoeTagCollector.reset}" execute="@form" render=":status :tags"/>
- 				<o:confirmation for="resetbutton"/>
- 				
+			<h:commandButton id="selectbutton" value="Select" >
+ 				<f:ajax event="click" listener="#{selectVideoToTag.select}" execute="@form" render=":videos"/>
 			</h:commandButton>
 		</h:form>
-		<h:panelGroup id="status" rendered="#{vidoeTagCollector.initial!=true}">
-			<h3>Result</h3>
-			<h:outputLabel value="Status "/>
-			<h:outputLabel value="#{vidoeTagCollector.status}"/>
-		</h:panelGroup>
-		<h:panelGroup id="tags" rendered="#{vidoeTagCollector.initial!=true}">
-			<o:dataTable value="#{vidoeTagCollector.tags}" var="tag">
+		<h:panelGroup id="videos" rendered="#{selectVideoToTag.initial!=true}">
+			<o:dataTable value="#{selectVideoToTag.videos}" var="video">
 				<o:column>
-            		<h:outputText value="#{tag}" />
+            		<h:outputText value="#{video.videoURL}" />
+        		</o:column>
+				<o:column>
+            		<h:outputText value="#{video.receivedTime}" />
         		</o:column>
 			</o:dataTable>
+			<ui:repeat value="#{selectVideoToTag.videos}" var="video">
+			    <h:link outcome="tag" value="#{video.videoURL}">
+			        <f:param name="videoId" value="#{video.objectId}" />
+			    </h:link>
+			</ui:repeat>
+
 		</h:panelGroup>
 	</f:view>
-	<h:form>
-		<o:inputText value="Test" 
-		          style="font-size: 14pt; background: silver"
-		rolloverStyle="background: yellow"		
-		focusedStyle="background: red"/>		
-	</h:form>
 </h:body>
 </html>

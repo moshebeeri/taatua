@@ -6,14 +6,19 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
     version="2.1">
 	<managed-bean>
-		<managed-bean-name>video</managed-bean-name>
-		<managed-bean-class>org.vidad.data.Video</managed-bean-class>
+		<managed-bean-name>selectVideoToTag</managed-bean-name>
+		<managed-bean-class>org.vidad.tag.model.SelectVideoToTag</managed-bean-class>
 		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<managed-bean>
-		<managed-bean-name>vidoeTagCollector</managed-bean-name>
-		<managed-bean-class>org.vidad.tag.model.VidoeTagCollector</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
+		<managed-bean-name>videoTagCollector</managed-bean-name>
+		<managed-bean-class>org.vidad.tag.model.VideoTagCollector</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+		<managed-property>
+	        <property-name>videoId</property-name>
+	        <value>#{param.videoId}</value>
+		</managed-property>
+		
 	</managed-bean>
 	<navigation-rule>
 	    <from-view-id>/index.xhtml</from-view-id>

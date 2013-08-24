@@ -11,13 +11,13 @@
     http://camel.apache.org/schema/spring
     http://camel.apache.org/schema/spring/camel-spring.xsd">
     
-	<bean id="VideoFeedProcesso" class="org.vidad.cloud.processor.VideoFeedProcessor"/>	
+	<bean id="VideoFeedProcessor" class="org.vidad.cloud.processor.VideoFeedProcessor"/>	
   	<camelContext xmlns="http://camel.apache.org/schema/spring">
 		<!-- Landing zone -->
 		<route>
      		<from uri="file://{{drive}}{{video.receiveURI}}/{{active.tenant}}"/>
      		<!-- <from uri="ftp://localhost:21/in?username=ftptest&amp;password=ftptest"/> -->
-     		<process ref="LZProcessor"/>
+     		<process ref="VideoFeedProcessor"/>
  			<when>
 				<simple>${in.header.status} == 'exception'</simple>
 				<to uri="aws-sqs:{{active.tenant}}_Exception?amazonSQSClient=#sqsClient" />				

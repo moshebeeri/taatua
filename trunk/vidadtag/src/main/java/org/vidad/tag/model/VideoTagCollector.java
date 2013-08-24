@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.event.AjaxBehaviorEvent;
 
@@ -23,28 +24,30 @@ import org.vidad.tools.nosql.Mongodb;
  */
 @ManagedBean	
 @SessionScoped
-public class VidoeTagCollector  implements Serializable{
+public class VideoTagCollector  implements Serializable{
 	/**
 	 * serialVersionUID -
 	 */
 	private static final long serialVersionUID = -5849533532636382036L;
-	transient Logger log = Logger.getLogger(VidoeTagCollector.class);
-	Mongodb mongo;
+	transient Logger log = Logger.getLogger(VideoTagCollector.class);
 	
 	boolean initial = true;
 	String status="";
 	String tagName="";
+	@ManagedProperty(value = "#{param.videoId}")
+	String videoId;
+	String taxonomyId= "";	
 	double videoTimeStamp=0d;
+	
 	List<String> tags = new ArrayList<String>();
 	
-	public VidoeTagCollector() {
+	public VideoTagCollector() {
 		super();
-		mongo = Mongodb.getInstance();
 	}
 
 	protected void insertTag(){
-		Tag tag = new Tag(tagName, tagName, videoTimeStamp, "");
-		mongo.insertCollectionable(tag);		
+		Tag tag = new Tag(tagName, taxonomyId, videoTimeStamp, "");
+		Mongodb.getInstance().insertCollectionable(tag);		
 	}
 	
 	public void add(AjaxBehaviorEvent e){
@@ -113,6 +116,22 @@ public class VidoeTagCollector  implements Serializable{
 
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+
+	public String getVideoId() {
+		return videoId;
+	}
+
+	public void setVideoId(String videoId) {
+		this.videoId = videoId;
+	}
+
+	public String getTaxonomyId() {
+		return taxonomyId;
+	}
+
+	public void setTaxonomyId(String taxonomyId) {
+		this.taxonomyId = taxonomyId;
 	}
 
 }
