@@ -9,7 +9,7 @@ import com.xuggle.xuggler.IStreamCoder;
 public class VideoInfo {
 	transient Logger log = Logger.getLogger(VideoInfo.class);
 
-    private static final String filename = "c:/myvideo.mp4";
+    private static final String filename = "/home/moshe/Videos/transmission/Game.of.Thrones.S03E10.720p.HDTV.x264-EVOLVE.mkv";
     
     public static void main(String[] args) {
         
@@ -50,7 +50,7 @@ public class VideoInfo {
             IStreamCoder coder = stream.getStreamCoder();
             
             System.out.println("*** Start of Stream Info ***");
-            
+            System.out.println( stream.getDuration());
             System.out.printf("stream %d: ", i);
             System.out.printf("type: %s; ", coder.getCodecType());
             System.out.printf("codec: %s; ", coder.getCodecID());
