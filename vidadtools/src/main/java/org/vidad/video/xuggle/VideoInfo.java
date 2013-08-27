@@ -1,4 +1,9 @@
-package org.vidad.video;
+package org.vidad.video.xuggle;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.Serializable;
+
 import org.apache.log4j.Logger;
 
 import com.xuggle.xuggler.ICodec;
@@ -6,12 +11,70 @@ import com.xuggle.xuggler.IContainer;
 import com.xuggle.xuggler.IStream;
 import com.xuggle.xuggler.IStreamCoder;
 
-public class VideoInfo {
+public class VideoInfo implements Serializable{
+	private static final long serialVersionUID = 2421066255769771580L;
 	transient Logger log = Logger.getLogger(VideoInfo.class);
+	private int numStreams;
+	private long duration;
+	private long fileSize;
+	private int bitRate;
+	
+	public VideoInfo fromStream(InputStream in){
+        //create a Xuggler container object
+        IContainer container = IContainer.make();
+        int result = container.open(in, null);
+        if (result<0)
+            throw new RuntimeException("Failed to open media file");
+        numStreams = container.getNumStreams();
+        duration = container.getDuration();
+        fileSize = container.getFileSize();
+        bitRate = container.getBitRate();
+        
+        log.info("Number of streams: " + numStreams);
+        log.info("Duration (ms): " + duration);
+        log.info("File Size (bytes): " + fileSize);
+        log.info("Bit Rate: " + bitRate);
+        return this;
+	}
+ 
+    public int getNumStreams() {
+		return numStreams;
+	}
 
-    private static final String filename = "/home/moshe/Videos/transmission/Game.of.Thrones.S03E10.720p.HDTV.x264-EVOLVE.mkv";
-    
-    public static void main(String[] args) {
+	public void setNumStreams(int numStreams) {
+		this.numStreams = numStreams;
+	}
+
+	public long getDuration() {
+		return duration;
+	}
+
+	public void setDuration(long duration) {
+		this.duration = duration;
+	}
+
+	public long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(long fileSize) {
+		this.fileSize = fileSize;
+	}
+
+
+	public int getBitRate() {
+		return bitRate;
+	}
+
+	public void setBitRate(int bitRate) {
+		this.bitRate = bitRate;
+	}
+
+	public static void main(String[] args) throws FileNotFoundException {
+        String filename = "/home/moshe/Videos/transmission/Game.of.Thrones.S03E10.720p.HDTV.x264-EVOLVE.mkv";
+
+    	new VideoInfo().fromStream(new FileInputStream(filename));
+    	
         
         // first we create a Xuggler container object
         IContainer container = IContainer.make();
@@ -59,7 +122,7 @@ public class VideoInfo {
             System.out.printf("timebase: %d/%d; ",
                  stream.getTimeBase().getNumerator(),
                  stream.getTimeBase().getDenominator());
-            System.out.printf("coder tb: %d/%d; ",
+            System.out.printf("codec tb: %d/%d; ",
                  coder.getTimeBase().getNumerator(),
                  coder.getTimeBase().getDenominator());
             System.out.println();

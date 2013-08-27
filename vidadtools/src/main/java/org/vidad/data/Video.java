@@ -11,22 +11,23 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.vidad.tools.conf.Collection;
+import org.vidad.video.xuggle.VideoInfo;
 
 /**
  * @author Moshe Beeri
- *
+ * 
  */
-public class Video extends Collectionable<Video> implements Serializable{
+public class Video extends Collectionable<Video> implements Serializable {
 	private static final long serialVersionUID = -2798571933254021201L;
 
 	transient Logger log = Logger.getLogger(Video.class);
-	
-	String	extension;
-	String	videoURL;
-	Date	receivedTime;
-	
-	
-	
+
+	String title;
+	String extension;
+	String videoURL;
+	Date receivedTime;
+	VideoInfo info;
+
 	public Video() {
 		super();
 	}
@@ -39,7 +40,7 @@ public class Video extends Collectionable<Video> implements Serializable{
 		super();
 		this.extension = extension;
 		this.videoURL = videoURL;
-		receivedTime = new DateTime().toDate();
+		this.receivedTime = new DateTime().toDate();
 	}
 
 	public String getExtension() {
@@ -54,25 +55,33 @@ public class Video extends Collectionable<Video> implements Serializable{
 		return videoURL;
 	}
 
-
-
 	public void setVideoURL(String videoURL) {
 		this.videoURL = videoURL;
 	}
-
-
 
 	public Date getReceivedTime() {
 		return receivedTime;
 	}
 
-
-
 	public void setReceivedTime(Date receivedTime) {
 		this.receivedTime = receivedTime;
 	}
 
+	public String getTitle() {
+		return title;
+	}
 
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public VideoInfo getInfo() {
+		return info;
+	}
+
+	public void setInfo(VideoInfo info) {
+		this.info = info;
+	}
 
 	/**
 	 * @return

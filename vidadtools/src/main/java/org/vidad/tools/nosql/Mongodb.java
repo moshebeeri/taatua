@@ -247,7 +247,24 @@ public class Mongodb implements Serializable{
 				clazz);
 	}
 
-	
+	/**
+	 * @param pageNumber 
+	 * @param nPerPage 
+	 * @param collectionable
+	 */
+	public <T extends Collectionable<?>> List<T> queryCollectionablePaged(
+			BasicDBObject query, Collection collection, Class<T> clazz, int pageNumber, int nPerPage) {
+		DBCollection dbCollection = collections.get(collection.name());
+		DBCursor cursor = dbCollection.find(query).skip((pageNumber-1)*nPerPage).limit(nPerPage);
+		List<T> ret = new ArrayList<T>();
+		while (cursor.hasNext()) {
+			String className = clazz.getSimpleName().toLowerCase();
+			DBObject next = cursor.next();
+			T t = gson.fromJson(next.get(className).toString(), clazz);
+			ret.add(t);
+		}
+		return ret;
+	}	
 
 	/**
 	 * @param collection
@@ -390,8 +407,6 @@ public class Mongodb implements Serializable{
 			String className = clazz.getSimpleName().toLowerCase();
 			DBObject next = cursor.next();
 			T t = gson.fromJson(next.get(className).toString(), clazz);
-			String _id = next.get("_id").toString();
-			log.info("_id:" + _id);
 			ret.add(t);
 		}
 		return ret;

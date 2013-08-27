@@ -8,11 +8,14 @@ package org.vidad.tag.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.vidad.data.Tag;
@@ -23,7 +26,7 @@ import org.vidad.tools.nosql.Mongodb;
  *
  */
 @ManagedBean	
-@SessionScoped
+@RequestScoped
 public class VideoTagCollector  implements Serializable{
 	/**
 	 * serialVersionUID -
@@ -50,13 +53,22 @@ public class VideoTagCollector  implements Serializable{
 		Mongodb.getInstance().insertCollectionable(tag);		
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void add(AjaxBehaviorEvent e){
-		log.info(e.getSource().toString());
-		String messge = "tag created for taxonomy: "+tagName +" at video time: " + videoTimeStamp;
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);       
+        if(session.getAttribute("tags")!=null)
+        	tags = (List<String>) session.getAttribute("tags");
+        else
+        	session.setAttribute("tags", tags);
+		//log.info(e.getSource().toString());
+		String messge = "tag created for videoId: " + videoId + " taxonomy: "+tagName +" at video time: " + videoTimeStamp;
 		log.info(messge);
 		initial=false;
 		status = messge;
 		tags.add(tagName);
+		for(String t : tags)
+			System.out.println(t);
 	}
 	
 	public void reset(AjaxBehaviorEvent e){

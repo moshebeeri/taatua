@@ -14,6 +14,7 @@ import org.vidad.camel.Template;
 import org.vidad.data.Task;
 import org.vidad.data.Video;
 import org.vidad.tools.conf.Configure;
+import org.vidad.video.xuggle.VideoInfo;
 
 
 public class VideoFeedProcessor extends BaseProcessor {
@@ -28,10 +29,9 @@ public class VideoFeedProcessor extends BaseProcessor {
 		Task task = null;
 		try{
 			String filename = exchange.getIn().getHeader(Exchange.FILE_NAME, String.class);
-			InputStream fis = new FileInputStream(exchange.getIn().getBody(File.class));
 			
 			if(FilenameUtils.getExtension(filename).equals("xml")){
-				task = handleXMLStream(fis);
+				task = handleXML(exchange);
 			}else{ //Assume video file received
 				task = store(exchange);
 			}
@@ -41,18 +41,22 @@ public class VideoFeedProcessor extends BaseProcessor {
 		}
 	}
 	
-	private Task createVideoTask(String filename) {
+	private Task createVideoTask(Exchange exchange) throws FileNotFoundException {
+		String filename = exchange.getIn().getHeader(Exchange.FILE_NAME, String.class);
 		String storeURL = Configure.settings().getString("video.storeURI");
 		String tenant = Configure.settings().getString("active.tenant");
 		String extension = FilenameUtils.getExtension(filename);
 		String videoURL = storeURL+File.separatorChar+tenant+File.separatorChar+filename;
 		Video video = new Video(videoURL, extension);
+		InputStream fis = new FileInputStream(exchange.getIn().getBody(File.class));
+		VideoInfo vidInfo = new VideoInfo().fromStream(fis);
+		video.setInfo(vidInfo);
 		mongo.insertCollectionable(video);
 		return new Task(video.getObjectId());
 	}
 
 
-	private Task handleXMLStream(InputStream fis) {
+	private Task handleXML(Exchange exchange) {
 		return null;
 	}
 
@@ -61,6 +65,6 @@ public class VideoFeedProcessor extends BaseProcessor {
 		ProducerTemplate storeTemplate = Template.byId("videofile-store-context");
 		//throws CamelExecutionException
 		storeTemplate.send("direct:video_store", exchange);
-		return createVideoTask(exchange.getIn().getHeader(Exchange.FILE_NAME, String.class));
+		return createVideoTask(exchange);
 	}	
 }
