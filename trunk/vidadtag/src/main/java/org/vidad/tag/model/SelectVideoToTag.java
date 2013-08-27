@@ -2,9 +2,12 @@ package org.vidad.tag.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 
 import org.apache.log4j.Logger;
@@ -21,6 +24,7 @@ public class SelectVideoToTag implements Serializable{
 	List<Video> videos;
 	double	duraion;
 	boolean initial;
+	String	videoId;
 	
 	public SelectVideoToTag() {
 		super();
@@ -30,6 +34,13 @@ public class SelectVideoToTag implements Serializable{
 		videos = mongo.getAllCollectionable(Collection.VIDEO, Video.class);
 	}
 	
+	public String tag() {
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		Map<String, Object> sessionMap = externalContext.getSessionMap();
+		sessionMap.put("videoId", videoId);
+		return "ok";
+	}
+
 	public List<Video> getVideos() {
 		return videos;
 	}

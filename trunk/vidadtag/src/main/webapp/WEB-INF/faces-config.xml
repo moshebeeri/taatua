@@ -13,20 +13,19 @@
 	<managed-bean>
 		<managed-bean-name>videoTagCollector</managed-bean-name>
 		<managed-bean-class>org.vidad.tag.model.VideoTagCollector</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
+		<managed-bean-scope>request</managed-bean-scope> 
 		<managed-property>
 	        <property-name>videoId</property-name>
 	        <value>#{param.videoId}</value>
 		</managed-property>
-		
 	</managed-bean>
 	<navigation-rule>
 	    <from-view-id>/index.xhtml</from-view-id>
-	
 	    <navigation-case>
-	       <from-outcome>added</from-outcome>
-	       <to-view-id>/index.xhtml</to-view-id>
+	       <from-outcome>ok</from-outcome>
+	       <to-view-id>/tag.xhtml</to-view-id>
 	       <redirect/>
 	    </navigation-case>
-	</navigation-rule>
+	</navigation-rule>	
+	
 </faces-config>

@@ -17,14 +17,10 @@
 	</script>  
 	<script type="text/javascript">
 		var paused = false;
-		var videoId="#{videoTagCollector.videoId}";
-		
-		function setTagFormHiddens(){
+		function setVideoTimeStampToTagForm(){
 			var vid = document.getElementById("myvid");
-			var time = document.getElementById("j_idt7:videoTimeStamp");
-			time.value = vid.currentTime;
-			var id = document.getElementById("j_idt7:videoId");
-			id.value = videoId
+			var edit = document.getElementById("j_idt7:videoTimeStamp");
+			edit.value = vid.currentTime;
 		}
 		function videoClicked(){
 			var vid = document.getElementById("myvid");
@@ -60,24 +56,33 @@
 				<h:outputLabel value="tag"/>
 				<o:inputText id="tag" value="#{videoTagCollector.tagName}" focusedStyle="background: Cornsilk"/>
 				<h:inputHidden id="videoTimeStamp"	value="#{videoTagCollector.videoTimeStamp}"/>
-				<h:inputHidden id="videoId"	value="#{videoTagCollector.videoId}"/>
 			</h:panelGrid>
-			<h:commandButton id="addbutton" value="Add" onclick="setTagFormHiddens()" >
- 				<f:ajax event="click" listener="#{videoTagCollector.add}" execute="@form" render=":status :tags" />
+			<h:commandButton id="addbutton" value="Add" onclick="setVideoTimeStampToTagForm()" >
+ 				<f:ajax event="click" listener="#{videoTagCollector.add}" execute="@form" render=":status :tags"/>
 			</h:commandButton>
-			
 			<h:commandButton id="resetbutton" value="Reset">
- 				<f:ajax event="click" listener="#{videoTagCollector.reset}" execute="@form" />
+ 				<f:ajax event="click" listener="#{videoTagCollector.reset}" execute="@form" render=":status :tags"/>
  				<o:confirmation for="resetbutton"/>				
 			</h:commandButton>
-			<br/>
 		</h:form>
-	</f:view>
-			<h:outputText id="status" value="#{videoTagCollector.status}" /> 		
-			<o:dataTable id="tags" value="#{videoTagCollector.tags}" var="tag">
+		<h:panelGroup id="status" rendered="#{videoTagCollector.initial!=true}">
+			<h3>Result</h3>
+			<h:outputLabel value="Status "/>
+			<h:outputLabel value="#{videoTagCollector.status}"/>
+		</h:panelGroup>
+		<h:panelGroup id="tags" rendered="#{videoTagCollector.initial!=true}">
+			<o:dataTable value="#{videoTagCollector.tags}" var="tag">
 				<o:column>
-	           		<h:outputText value="#{tag}" />
-	       		</o:column>
+            		<h:outputText value="#{tag}" />
+        		</o:column>
 			</o:dataTable>
+		</h:panelGroup>
+	</f:view>
+	<h:form>
+		<o:inputText value="Test" 
+		          style="font-size: 14pt; background: silver"
+		rolloverStyle="background: yellow"		
+		focusedStyle="background: red"/>		
+	</h:form>
 </h:body>
 </html>

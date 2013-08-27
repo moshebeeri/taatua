@@ -35,9 +35,23 @@
         		</o:column>
 			</o:dataTable>
 			<ui:repeat value="#{selectVideoToTag.videos}" var="video">
+				<h:form >
+					<h:outputText value="#{video.videoURL}" />
+					<o:inputText id="tag" value="#{videoTagCollector.videoId}"></o:inputText>
+					<h:commandButton id="tagbutton" value="Tag" action="#{selectVideoToTag.tag}">
+						<f:setPropertyActionListener target="#{videoTagCollector.videoId}" value="#{video.objectId}"/>
+					</h:commandButton>
+					
+<!-- 					<h:commandLink value="#{video.videoURL}" >
+  						<f:setPropertyActionListener target="#{videoTagCollector.videoId}" value="#{video.objectId}"/>
+					</h:commandLink> -->					
+				</h:form>
+			</ui:repeat>
+			<ui:repeat value="#{selectVideoToTag.videos}" var="video">
 			    <h:link outcome="tag" value="#{video.videoURL}">
 			        <f:param name="videoId" value="#{video.objectId}" />
 			    </h:link>
+			    <br/>
 			</ui:repeat>
 
 		</h:panelGroup>
