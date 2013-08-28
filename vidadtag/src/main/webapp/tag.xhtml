@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:o="http://openfaces.org/"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:o="http://openfaces.org/"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"/>
-	<script type="text/javascript"  src="js/vidadtag.js" />
+	<script type="text/javascript"
+		src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" />
+	<script type="text/javascript" src="js/vidadtag.js" />
 	<script>
 		$(document).ready(function () {
-			//PrimeFaces.escapeClientId('#j_idt7:tag') == "#j_idt7\\:tag"
-			console.log("document ready function " + $("#j_idt7\\:tag").prop("tagName"));
-		    $("#j_idt7\\:tag").focus();
+			//PrimeFaces.escapeClientId('#j_idt6:tag') == "#j_idt6\\:tag"
+			console.log("document ready function " + $("#j_idt6\\:tag").prop("tagName"));
+		    $("#j_idt6\\:tag").focus();
 		   });
-	</script>  
+	</script>
 	<script type="text/javascript">
 		var paused = false;
 		var videoId="#{videoTagCollector.videoId}";
 		
 		function setTagFormHiddens(){
 			var vid = document.getElementById("myvid");
-			var time = document.getElementById("j_idt7:videoTimeStamp");
+			var time = document.getElementById("j_idt6:videoTimeStamp");
 			time.value = vid.currentTime;
-			var id = document.getElementById("j_idt7:videoId");
+			var id = document.getElementById("j_idt6:videoId");
 			id.value = videoId
 		}
 		function videoClicked(){
@@ -44,40 +44,54 @@
 
 <h:body>
 	<h2>Vidadtag server is running</h2>
-	<br/>
+	<br />
 	<!-- see http://stackoverflow.com/questions/5231817/html5-video-tag-jsf2 -->
-	<video width="320" height="240" autoplay="autoplay" id="myvid" onclick="videoClicked()">
-		<source src="rest/video/get/vid/#{videoTagCollector.videoId}" type="video/mp4"></source>
+	<video width="320" height="240" autoplay="autoplay" id="myvid"
+		onclick="videoClicked()">
+		<source src="rest/video/get/vid/#{videoTagCollector.videoId}"
+			type="video/mp4"></source>
 		<!-- Your browser does not support the video tag. -->
 	</video>
-	<br/>
-	
-	<h:outputText value="insert tag here"></h:outputText>
-	
+	<br />
+	<!-- http://stackoverflow.com/questions/9090850/jquery-auto-complete-with-jsf -->
 	<f:view>
-		<h:form>
-			<h:panelGrid columns="2">
-				<h:outputLabel value="tag"/>
-				<o:inputText id="tag" value="#{videoTagCollector.tagName}" focusedStyle="background: Cornsilk"/>
-				<h:inputHidden id="videoTimeStamp"	value="#{videoTagCollector.videoTimeStamp}"/>
-				<h:inputHidden id="videoId"	value="#{videoTagCollector.videoId}"/>
-			</h:panelGrid>
-			<h:commandButton id="addbutton" value="Add" onclick="setTagFormHiddens()" >
- 				<f:ajax event="click" listener="#{videoTagCollector.add}" execute="@form" render=":status :tags" />
-			</h:commandButton>
-			
-			<h:commandButton id="resetbutton" value="Reset">
- 				<f:ajax event="click" listener="#{videoTagCollector.reset}" execute="@form" />
- 				<o:confirmation for="resetbutton"/>				
-			</h:commandButton>
-			<br/>
-		</h:form>
+			<h:form>
+				<h:panelGrid columns="2">
+					<h:outputLabel value="tag" />
+					<o:inputText id="tag" value="#{videoTagCollector.tagName}"
+						focusedStyle="background: Cornsilk" />
+					
+					<o:suggestionField value="#{videoTagCollector.tagName}"
+						customValueAllowed="true" autoComplete="true"
+						suggestionMode="custom" suggestionDelay="50"
+						suggestionMinChars="3">
+						<o:dropDownItems value="#{tagCollector.suggestedTags}"/>
+					</o:suggestionField>
+					
+					<!-- http://stackoverflow.com/questions/5335081/how-to-use-autocomplete-of-richfaces-with-table-layout -->
+					<h:inputHidden id="videoTimeStamp"
+						value="#{videoTagCollector.videoTimeStamp}" />
+					<h:inputHidden id="videoId" value="#{videoTagCollector.videoId}" />
+				</h:panelGrid>
+				<h:commandButton id="addbutton" value="Add"
+					onclick="setTagFormHiddens()">
+					<f:ajax event="click" listener="#{videoTagCollector.add}"
+						execute="@form" render=":status :tags" />
+				</h:commandButton>
+
+				<h:commandButton id="resetbutton" value="Reset">
+					<f:ajax event="click" listener="#{videoTagCollector.reset}"
+						execute="@form" />
+					<o:confirmation for="resetbutton" />
+				</h:commandButton>
+				<br />
+			</h:form>
+	<h:outputText id="status" value="#{videoTagCollector.status}" />
+	<o:dataTable id="tags" value="#{videoTagCollector.tags}" var="tag">
+		<o:column>
+			<h:outputText value="#{tag}" />
+		</o:column>
+	</o:dataTable>
 	</f:view>
-			<h:outputText id="status" value="#{videoTagCollector.status}" /> 		
-			<o:dataTable id="tags" value="#{videoTagCollector.tags}" var="tag">
-				<o:column>
-	           		<h:outputText value="#{tag}" />
-	       		</o:column>
-			</o:dataTable>
 </h:body>
 </html>
