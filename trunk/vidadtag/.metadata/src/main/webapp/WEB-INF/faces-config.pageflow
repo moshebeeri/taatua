@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pageflow:Pageflow xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13764059742110" configfile="/vidadtag/src/main/webapp/WEB-INF/faces-config.xml"/>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13764059742110" configfile="/vidadtag/src/main/webapp/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="index.xhtml" x="122" y="178" id="pf13776485043680" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf13776485043681" path="/index.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="tag.xhtml" x="338" y="178" id="pf13776485043682" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf13776485043681" path="/tag.xhtml"/>
+  <links id="pf13776485043681" target="pf13776485043682" source="pf13776485043680" outcome="ok" redirect="true"/>
+</pageflow:Pageflow>

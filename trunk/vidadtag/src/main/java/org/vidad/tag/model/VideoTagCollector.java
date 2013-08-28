@@ -7,17 +7,21 @@ package org.vidad.tag.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.openfaces.util.Faces;
 import org.vidad.data.Tag;
 import org.vidad.tools.nosql.Mongodb;
 
@@ -42,7 +46,8 @@ public class VideoTagCollector  implements Serializable{
 	String taxonomyId= "";	
 	double videoTimeStamp=0d;
 	
-	List<String> tags = new ArrayList<String>();
+	List<String> videoTags = new ArrayList<String>();
+	List<String> suggestedTags = new ArrayList<String>();
 	
 	public VideoTagCollector() {
 		super();
@@ -58,24 +63,63 @@ public class VideoTagCollector  implements Serializable{
         FacesContext facesContext = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);       
         if(session.getAttribute("tags")!=null)
-        	tags = (List<String>) session.getAttribute("tags");
+        	videoTags = (List<String>) session.getAttribute("tags");
         else
-        	session.setAttribute("tags", tags);
+        	session.setAttribute("tags", videoTags);
 		//log.info(e.getSource().toString());
 		String messge = "tag created for videoId: " + videoId + " taxonomy: "+tagName +" at video time: " + videoTimeStamp;
 		log.info(messge);
 		initial=false;
 		status = messge;
-		tags.add(tagName);
-		for(String t : tags)
+		videoTags.add(tagName);
+		for(String t : videoTags)
 			System.out.println(t);
 	}
+	private List<String> autocomplete;
 	
+	public List<String> getAutocomplete() {
+		return autocomplete;
+	}
+
+	public void setAutocomplete(List<String> autocomplete) {
+		this.autocomplete = autocomplete;
+	}
+	private List<String> searchTag;
+	public List<String> searchTagAll(Object prefix) {
+        ArrayList<String> result = new ArrayList<String>();
+        if ((prefix == null) || (((String)prefix).length() == 0)) {
+            for (int i = 0; i < 10; i++) {
+                result.add("start" + i);
+            }
+        } else {
+            for (int i = 0; i < 10; i++) {
+                result.add(prefix + " " + i);
+            }
+        }
+        return searchTag=result;
+    }
+	
+	public List<String> getSearchTag() {
+		return searchTag;
+	}
+
+	public void setSearchTag(List<String> searchTag) {
+		this.searchTag = searchTag;
+	}
+
+	public List<String> getSuggestedTags(){
+		String searchString = Faces.var("searchString", String.class);
+//		if(searchString==null)
+//			return new ArrayList<String>();
+		suggestedTags = Arrays.asList(new String[]{"ford", "mazda", "fiat"});
+			
+		return suggestedTags;	
+	}
 	public void reset(AjaxBehaviorEvent e){
 		status="";
 		tagName="";
 		videoTimeStamp=0d;
-		tags = new ArrayList<String>();
+		videoTags = new ArrayList<String>();
 	}
 
 	/**
@@ -123,11 +167,11 @@ public class VideoTagCollector  implements Serializable{
 	}
 
 	public List<String> getTags() {
-		return tags;
+		return videoTags;
 	}
 
 	public void setTags(List<String> tags) {
-		this.tags = tags;
+		this.videoTags = tags;
 	}
 
 	public String getVideoId() {
