@@ -5,8 +5,6 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
-	<script type="text/javascript"
-		src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" />
 	<script type="text/javascript" src="js/vidadtag.js" />
 	<script>
 		$(document).ready(function () {
@@ -63,7 +61,7 @@
 					
 					<o:suggestionField value="#{videoTagCollector.tagName}"
 						customValueAllowed="true" autoComplete="true"
-						suggestionMode="custom" suggestionDelay="50"
+						suggestionMode="client" suggestionDelay="50"
 						suggestionMinChars="3">
 						<o:dropDownItems value="#{tagCollector.suggestedTags}"/>
 					</o:suggestionField>

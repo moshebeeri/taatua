@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -106,9 +105,31 @@ public class VideoTagCollector  implements Serializable{
 	public void setSearchTag(List<String> searchTag) {
 		this.searchTag = searchTag;
 	}
+	public String tagNameConverter(String in){
+		return in;
+	}
+	public Converter getTagNameConverter(){
+		return new Converter() {
+			
+			@Override
+			public String getAsString(FacesContext context, UIComponent converter, Object value) {
+				System.out.println(Faces.var("Converter.searchString", String.class));
+				System.out.println("getAsString=" +(String)value);
+				return (String)value;
+			}
+			
+			@Override
+			public Object getAsObject(FacesContext context, UIComponent converter, String value) {
+				System.out.println("getAsObject=" +value);
+				return value;
+			}
+		};
+	}
 
 	public List<String> getSuggestedTags(){
 		String searchString = Faces.var("searchString", String.class);
+		System.out.println("searchString="+ searchString);
+
 //		if(searchString==null)
 //			return new ArrayList<String>();
 		suggestedTags = Arrays.asList(new String[]{"ford", "mazda", "fiat"});

@@ -20,9 +20,19 @@
 		</managed-property>
 	</managed-bean>
 	<managed-bean>
+		<managed-bean-name>tagCollector</managed-bean-name>
+		<managed-bean-class>org.vidad.tag.model.TagCollector</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope> 
+	</managed-bean>
+	<managed-bean>
 		<managed-bean-name>userBean</managed-bean-name>
 		<managed-bean-class>org.vidad.tag.model.UserBean</managed-bean-class>
 		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>autoComplete</managed-bean-name>
+		<managed-bean-class>org.vidad.tag.model.AutoComplete</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
 	</managed-bean>
 	<navigation-rule>
 	    <from-view-id>/index.xhtml</from-view-id>
