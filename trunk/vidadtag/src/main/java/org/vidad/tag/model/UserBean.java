@@ -4,16 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.validation.constraints.Size;
 
 import org.apache.log4j.Logger;
 
 @ManagedBean
+@RequestScoped
 public class UserBean {
 	transient Logger log = Logger.getLogger(UserBean.class);
 
 	    public List<String> autocomplete(String prefix) {
-
+	    	System.out.println("prefix="+prefix);
 	        ArrayList<String> result = new ArrayList<String>();
 	        result.add("England");
 	        result.add("France");
@@ -44,5 +46,4 @@ public class UserBean {
 		public void setState(String state) {
 			this.state = state;
 		}
-
 	}

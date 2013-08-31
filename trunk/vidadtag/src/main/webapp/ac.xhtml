@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html" xmlns:o="http://openfaces.org/">
+
+<h:head>
+<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+<script>
+$(document).ready(function() {
+    $( "#origform\\:name" ).autocomplete({
+      source: function( request, response ) {
+        $.ajax({
+          url: "http://ws.geonames.org/searchJSON",
+          dataType: "jsonp",
+          data: {
+            featureClass: "P",
+            style: "full",
+            maxRows: 12,
+            name_startsWith: request.term
+          },
+          success: function( data ) {
+            response( $.map( data.geonames, function( item ) {
+              return {
+                label: item.name + (item.adminName1 ? ", " + item.adminName1 : "") + ", " + item.countryName,
+                value: item.name
+              }
+            }));
+          }
+        });
+      },
+      minLength: 2,
+      select: function( event, ui ) {
+        console.log( ui.item ?
+          "Selected: " + ui.item.label :
+          "Nothing selected, input was " + this.value);
+      },
+      open: function() {
+        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+      },
+      close: function() {
+        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+      }
+    });
+  });
+  </script>
+
+</h:head>
+	<h:body>
+	<h:form>
+	a:<br/>
+		
+		<o:suggestionField value="#{tagCollector.tagName}"
+			suggestionDelay="50" suggestionMinChars="1"
+			suggestionMode="custom"
+			converter="#{tagCollector.tagNameConverter}">		
+			<o:dropDownField>
+				<o:dropDownItems value="#{tagCollector.suggestedTags}" />		
+			</o:dropDownField>
+			
+		</o:suggestionField><br/>
+	b:<br/>
+		<o:dropDownField>
+			<o:dropDownItems value="#{autoComplete.names}" />
+		</o:dropDownField>
+		
+	</h:form>
+	<h:form id="origform">
+    	   <h:inputText id="name" value="#{tagCollector.tagName}"></h:inputText>
+   	</h:form>
+	
+	</h:body>
+</html>
