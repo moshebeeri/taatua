@@ -7,30 +7,45 @@
 	
 	<f:view>
 		<h:head>
-		
-		</h:head>
+ 	<script type="text/javascript">
+    function processSelectEvent (event){
+		console.debug(event.srcElement.nextSibling.innerText);
+		var id = document.getElementById("complete:valueId");
+		id.value = event.srcElement.nextSibling.innerText;
+}
+	</script>
+
+	</h:head>
 		<h:body>
-		    <h:form>		
-			<rich:panel header="other auto-completion">
+		    <h:form id="complete">		
+			
+				<rich:panel header="other auto-completion">
 					<rich:autocomplete
 					autocompleteMethod="#{autoComplete.autocomplete}"
-					autocompleteList="#{autoComplete.locations}"
 					mode="ajax" 
 					showButton="true"
 					layout="table"
 					var="data"
 					fetchValue="#{data.name}" 
 					id="tag_names"
-					value="#{tagCollector.tagName}">
+					onselectitem="processSelectEvent(event);return false;"
+					value="#{tagCollector.valueName}">
 						<rich:column>
 						#{data.name}
 						</rich:column>
 						<rich:column>
-						#{data.objid}
+						#{data.id}
 						</rich:column>
-					</rich:autocomplete>
-			</rich:panel>
+					</rich:autocomplete><br/>
+					<br/>
+					<h:inputText id="valueId" value="#{tagCollector.valueId}" />
+					<h:commandButton id="addbutton" value="Add">
+						<f:ajax event="click" listener="#{tagCollector.add}"
+							execute="@form" render=":status" />
+					</h:commandButton>			
+				</rich:panel>
 		    </h:form>
+			<h:outputText id="status" value="#{tagCollector.status}" />
 		</h:body>
 	</f:view>
 </ui:composition>

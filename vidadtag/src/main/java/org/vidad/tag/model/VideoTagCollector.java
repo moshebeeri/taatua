@@ -20,7 +20,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.openfaces.util.Faces;
+//import org.openfaces.util.Faces;
 import org.vidad.data.Tag;
 import org.vidad.tools.nosql.Mongodb;
 
@@ -113,7 +113,7 @@ public class VideoTagCollector  implements Serializable{
 			
 			@Override
 			public String getAsString(FacesContext context, UIComponent converter, Object value) {
-				System.out.println(Faces.var("Converter.searchString", String.class));
+//				System.out.println(Faces.var("Converter.searchString", String.class));
 				System.out.println("getAsString=" +(String)value);
 				return (String)value;
 			}
@@ -127,8 +127,8 @@ public class VideoTagCollector  implements Serializable{
 	}
 
 	public List<String> getSuggestedTags(){
-		String searchString = Faces.var("searchString", String.class);
-		System.out.println("searchString="+ searchString);
+		//String searchString = Faces.var("searchString", String.class);
+		//System.out.println("searchString="+ searchString);
 
 //		if(searchString==null)
 //			return new ArrayList<String>();

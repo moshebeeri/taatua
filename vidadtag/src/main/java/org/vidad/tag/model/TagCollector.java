@@ -6,15 +6,11 @@
 package org.vidad.tag.model;
 
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import org.openfaces.util.Faces;
+import javax.faces.event.AjaxBehaviorEvent;
+
+import org.vidad.data.NamedId;
 
 /**
  * @author Moshe Beeri
@@ -25,36 +21,45 @@ import org.openfaces.util.Faces;
 public class TagCollector  implements Serializable{
 
 	private static final long serialVersionUID = 4930140495481611695L;
-	String tagName;
-	public Converter getTagNameConverter(){
-		return new Converter() {
-			
-			@Override
-			public String getAsString(FacesContext context, UIComponent converter, Object value) {
-				System.out.println("getAsString=" +(String)value);
-				return (String)value;
-			}
-			
-			@Override
-			public Object getAsObject(FacesContext context, UIComponent converter, String value) {
-				System.out.println("getAsObject=" +value);
-				return value;
-			}
-		};
+	NamedId value;
+	String valueName;
+	String valueId;
+	String status;
+	
+	public void add(AjaxBehaviorEvent e){
+		status = "valueName="+valueName + " valueId="+valueId;	
 	}
 
-	public List<String> getSuggestedTags(){
-		String searchString = Faces.var("searchString", String.class);
-		System.out.println("getSuggestedTags searchString="+ searchString);
-		List<String> suggestedTags = Arrays.asList(new String[]{"ford", "mazda", "fiat"});
-		return suggestedTags;	
+	public NamedId getValue() {
+		return value;
 	}
 
-	public String getTagName() {
-		return tagName;
+	public void setValue(NamedId value) {
+		this.value = value;
 	}
 
-	public void setTagName(String tagName) {
-		this.tagName = tagName;
+	public String getStatus() {
+		return status;
 	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getValueName() {
+		return valueName;
+	}
+
+	public void setValueName(String valueName) {
+		this.valueName = valueName;
+	}
+
+	public String getValueId() {
+		return valueId;
+	}
+
+	public void setValueId(String valueId) {
+		this.valueId = valueId;
+	}
+	
 }

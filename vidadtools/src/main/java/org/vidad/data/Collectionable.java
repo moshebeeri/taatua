@@ -9,6 +9,7 @@ import java.lang.reflect.ParameterizedType;
 
 import org.bson.types.ObjectId;
 import org.vidad.tools.conf.Collection;
+import org.vidad.tools.nosql.Mongodb;
 
 import com.google.gson.Gson;
 
@@ -19,6 +20,7 @@ import com.google.gson.Gson;
  */
 public abstract class Collectionable<T> {
 	protected transient Gson gson = new Gson();
+	protected transient Mongodb mongo = Mongodb.getInstance();
 	protected ObjectId objectId;
 	
 	abstract public Collection getCollection();
@@ -43,4 +45,11 @@ public abstract class Collectionable<T> {
                 .getGenericSuperclass()).getActualTypeArguments()[0];
 		return gson.fromJson(json, t);
 	}
+
+	public void lightweight() {}
+	public void retrived() {}
+	public void inserted() {}
+	public void updated() {}
+	public void deleted() {}
+
 }

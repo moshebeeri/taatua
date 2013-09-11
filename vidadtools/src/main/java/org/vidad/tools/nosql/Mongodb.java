@@ -178,7 +178,9 @@ public class Mongodb implements Serializable{
 	 */
 	public <T extends Collectionable<?>> T getCollectionable(ObjectId id,
 			Collection collection, Class<T> clazz) {
-		return getObject(id, collections.get(collection.name()), clazz);
+		T t = getObject(id, collections.get(collection.name()), clazz);
+		t.retrived();
+		return t;
 	}
 
 	/**
@@ -189,7 +191,9 @@ public class Mongodb implements Serializable{
 	 */
 	public <T extends Collectionable<?>> List<T> getAllCollectionable(
 			Collection collection, Class<T> clazz) {
-		return getAllObjects(collections.get(collection.name()), clazz);
+		List<T> l = getAllObjects(collections.get(collection.name()), clazz);
+		for( T t: l)	t.retrived();
+		return l;
 	}
 	
 	/**
@@ -199,9 +203,12 @@ public class Mongodb implements Serializable{
 	 * @return
 	 */
 	public <T extends Collectionable<?>> List<T> getFromTimeCollectionable(
-			DateTime from, Collection collection, Class<T> clazz) {
-		return queryObjectsFromTime(from,
+			DateTime from, Collection collection, Class<T> clazz) { 
+		List<T> l = queryObjectsFromTime(from,
 				collections.get(collection.name()), clazz);
+		for( T t: l)	t.retrived();
+		return l;
+		
 	}
 
 	/**
@@ -216,6 +223,7 @@ public class Mongodb implements Serializable{
 		//Save object id 
 		collectionable.setObjectId(id);
 		updateCollectionable(collectionable);
+		collectionable.inserted();
 		return id;
 	}
 
@@ -224,9 +232,11 @@ public class Mongodb implements Serializable{
 	 * @return
 	 */
 	public ObjectId updateCollectionable(Collectionable<?> collectionable) {
-		return updateObjectToCollection(
+		ObjectId id = updateObjectToCollection(
 				collections.get(collectionable.getCollection().name()),
 				collectionable.getObjectId(), collectionable);
+		collectionable.updated();
+		return id;
 	}
 
 	/**
@@ -235,7 +245,9 @@ public class Mongodb implements Serializable{
 	 */
 	public <T extends Collectionable<?>> T deleteCollectionable(ObjectId id,
 			Collection collection, Class<T> clazz) {
-		return deleteObject(id, collections.get(collection.name()), clazz);
+		T d = deleteObject(id, collections.get(collection.name()), clazz);
+		d.deleted();
+		return d;
 	}
 
 	/**
