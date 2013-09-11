@@ -61,9 +61,9 @@
 					
 					<o:suggestionField value="#{videoTagCollector.tagName}"
 						customValueAllowed="true" autoComplete="true"
-						suggestionMode="client" suggestionDelay="50"
-						suggestionMinChars="3">
-						<o:dropDownItems value="#{tagCollector.suggestedTags}"/>
+						suggestionMode="custom" suggestionDelay="50"
+						suggestionMinChars="1">
+						<o:dropDownItems value="#{autoComplete.suggestedTags}"/>
 					</o:suggestionField>
 					
 					<!-- http://stackoverflow.com/questions/5335081/how-to-use-autocomplete-of-richfaces-with-table-layout -->

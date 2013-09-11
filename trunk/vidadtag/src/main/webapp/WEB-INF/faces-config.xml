@@ -32,7 +32,7 @@
 	<managed-bean>
 		<managed-bean-name>autoComplete</managed-bean-name>
 		<managed-bean-class>org.vidad.tag.model.AutoComplete</managed-bean-class>
-		<managed-bean-scope>application</managed-bean-scope>
+		<managed-bean-scope>session</managed-bean-scope>
 	</managed-bean>
 	<navigation-rule>
 	    <from-view-id>/index.xhtml</from-view-id>

@@ -14,15 +14,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.search.spell.PlainTextDictionary;
 import org.apache.lucene.search.spell.SpellChecker;
-import org.vidad.lucene.SpellCheckService;
+import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.Version;
+import org.vidad.autocomplete.Completer;
 import org.vidad.tools.conf.Collection;
 
-public class Dictionary extends Collectionable<Dictionary> {
+public class Dictionary extends Collectionable<Dictionary> implements Completer{
 	transient Logger log = Logger.getLogger(Dictionary.class);
+	String	name;
+	String	lang;
+	boolean	open=false;
 	List<String> words;
+	transient SpellChecker spellChecker;
+	transient Trie trie;
 	
-	public Dictionary() {
+	public Dictionary(String name, String lang) {
+		this.name	=	name;
+		this.lang	=	lang;
+		words		= new ArrayList<String>();
+		spellChecker= null;
+		trie		= null;
 	}
 
 	@Override
@@ -30,9 +45,31 @@ public class Dictionary extends Collectionable<Dictionary> {
 		return Collection.DICTIONARY;
 	}
 	
-	public static Dictionary fromFile(Path path) throws IOException{
+	@Override
+	public void lightweight() {
+		super.lightweight();
+		words		= new ArrayList<String>();
+		spellChecker= null;
+		trie		= null;
+	}
+	
+	@Override
+	public void retrived(){
+		super.retrived();
+		try {
+			spellChecker = createSpellChecker();
+			trie = new Trie();
+			for(String word : words)
+				trie.insert(word);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
+	public static Dictionary fromFile(String name, String lang, Path path) throws IOException{
 		String word;
-		Dictionary dictionary = new Dictionary();
+		Dictionary dictionary = new Dictionary(name, lang);
 		dictionary.words = new ArrayList<>();
 		FileInputStream fis = new FileInputStream(path.toFile());
 		BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
@@ -40,11 +77,22 @@ public class Dictionary extends Collectionable<Dictionary> {
 			dictionary.words.add(word);
 		}
 		reader.close();
+		dictionary.mongo.insertCollectionable(dictionary);
 		return dictionary;
 	}
 	
-	public SpellChecker createSpellChecker() throws Exception{
-		return new SpellCheckService().createSpellChecker(toInputStreamReader());
+	protected SpellChecker createSpellChecker() throws Exception{
+		return createSpellChecker(toInputStreamReader());
+	}
+	
+	public SpellChecker createSpellChecker(InputStreamReader isr)throws Exception{
+        RAMDirectory spellCheckerDir = new RAMDirectory();
+        SpellChecker spellChecker = new SpellChecker(spellCheckerDir);
+        StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_44);
+        IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_44, analyzer);
+        PlainTextDictionary plainTextDictionary = new PlainTextDictionary(isr);
+        spellChecker.indexDictionary(plainTextDictionary, config, true);
+		return spellChecker;	
 	}
 	
 	public Trie createTrie(){
@@ -59,19 +107,49 @@ public class Dictionary extends Collectionable<Dictionary> {
 		ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
 		return new InputStreamReader(bais);
 	} 
+	
+	@Override
+	public List<NamedId> autocompEx(String prefix) {
+		return null;
+	}
+	
+	@Override
+	public List<String> autocomp(String prefix) {
+		return trie.search(prefix);
+	}
+
+	@Override
+	public void update(NamedId newone) {
+		if(open)
+			words.add(newone.getName());
+		//else
+		//this dictionary is closed.
+	}
+
+	@Override
+	public String name() {
+		return name;
+	}
+	
+	
 	public static void main(String[] args) throws IOException, Exception {
-		SpellChecker spellChecker = Dictionary.fromFile(Paths.get("/home/moshe/data/vidad/ftp.cerias.purdue.edu/pub/dict/dictionaries/English/words.english")).
+		SpellChecker spellChecker = Dictionary.fromFile("words.english","en", Paths.get("/home/moshe/data/vidad/ftp.cerias.purdue.edu/pub/dict/dictionaries/English/words.english")).
 			createSpellChecker();
-        String wordForSuggestions = "hwllo";
-        int suggestionsNumber = 5;
-        String[] suggestions = spellChecker.suggestSimilar("hwllo", suggestionsNumber); // word 'hello' is misspeled like 'hwllo'
-        if (suggestions!=null && suggestions.length>0) {
-            for (String word : suggestions) {
-                System.out.println("Did you mean:" + word);
-            }
-        }
-        else {
-            System.out.println("No suggestions found for word:"+wordForSuggestions);
+        String wordForSuggestions = "hello";
+        if( !spellChecker.exist(wordForSuggestions) ) {
+	        int suggestionsNumber = 5;
+	        String[] suggestions = spellChecker.suggestSimilar(wordForSuggestions, suggestionsNumber); // word 'hello' is misspeled like 'hwllo'
+	        if (suggestions!=null && suggestions.length>0) {
+	            for (String word : suggestions) {
+	                System.out.println("Did you mean:" + word);
+	            }
+	        }
+	        else {
+	            System.out.println("No suggestions found for word:"+wordForSuggestions);
+	        }
+        }else{
+            System.out.println("word:"+wordForSuggestions + " is spelled ok");
+
         }
        spellChecker.close();
 		

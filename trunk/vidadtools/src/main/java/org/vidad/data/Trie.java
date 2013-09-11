@@ -14,15 +14,15 @@ import com.google.gson.Gson;
 
 public class Trie extends Collectionable<Trie> {
 
+	Collection collection;
+	ObjectId rootId;
+	String name;
+    private final TrieNode root;
+
 	@Override
 	public Collection getCollection() {
 		return Collection.TRIE;
 	}
-	Collection collection;
-	ObjectId rootId;
-	String name;
-
-    private final TrieNode root;
 
     /**
      * Creates a new empty TRIE object.
@@ -141,7 +141,7 @@ public class Trie extends Collectionable<Trie> {
             return edges == null ? 0 : edges.size();
         }
     }
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
     	Gson gson = new Gson();
     	Trie trie = new Trie();
     	trie.insert("hello");
@@ -151,7 +151,7 @@ public class Trie extends Collectionable<Trie> {
     	System.out.println(t.search("he"));
     }
     
-    public static void main1(String[] args) {
+    public static void main(String[] args) {
         Trie t = new Trie();
         t.insert("vino");
         t.insert("vinod");

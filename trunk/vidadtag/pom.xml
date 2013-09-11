@@ -127,12 +127,12 @@
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-api</artifactId>
-			<version>2.2.1</version>
+			<version>2.1.25</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.faces</groupId>
 			<artifactId>jsf-impl</artifactId>
-			<version>2.2.1</version>
+			<version>2.1.25</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -150,18 +150,9 @@
             <version>2.0</version>
             <scope>provided</scope>
         </dependency>
-		<dependency>
-			<groupId>javax.servlet.jsp</groupId>
-			<artifactId>jsp-api</artifactId>
-			<version>2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.myfaces.core</groupId>
-			<artifactId>myfaces-api</artifactId>
-			<version>2.1.11</version>
-		</dependency>
+
 		<!-- openfaces -->
-		<dependency>
+ 		<dependency>
 			<groupId>org.openfaces</groupId>
 			<artifactId>openfaces</artifactId>
 			<version>3.0</version>
