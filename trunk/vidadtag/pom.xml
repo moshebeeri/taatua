@@ -48,6 +48,13 @@
 			<scope>import</scope>
 			<type>pom</type>
 		</dependency>
+	    <dependency>
+	        <groupId>org.richfaces</groupId>
+	        <artifactId>richfaces-bom</artifactId>
+	        <version>${org.richfaces.version}</version>
+	        <scope>import</scope>
+	        <type>pom</type>
+	    </dependency>
 		<dependency>
 			<groupId>org.richfaces.ui</groupId>
 			<artifactId>richfaces-components-ui</artifactId>

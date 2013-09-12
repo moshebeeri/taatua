@@ -13,8 +13,11 @@ import org.openfaces.util.Faces;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+
 import org.vidad.data.NamedId;
 
 /**
