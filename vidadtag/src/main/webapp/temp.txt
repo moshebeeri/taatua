@@ -1,0 +1,12 @@
+					onselectitem="processSelectEvent(event);return false;"
+					onkeydown="if(event.keyCode == 13)setIdCidade($('.rf-au-itm-sel span').attr('title'))"
+
+					<h:outputText id="did" value="#{data.name} / #{data.id}" title="#{data.id}"/>
+					<a4j:jsFunction name="setId">
+					      <a4j:param name="param" assignTo="#{tagCollector.valueId}" />
+					</a4j:jsFunction>
+					<f:ajax event="selectitem" onevent="setId(event.target.title)" />
+
+
+
+					<h:inputText id="valueId" value="#{tagCollector.valueId}" />

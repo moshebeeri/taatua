@@ -18,32 +18,32 @@
 	</h:head>
 		<h:body>
 		    <h:form id="complete">		
-			
 				<rich:panel header="other auto-completion">
+		            <f:facet name="header">
+		                <h:outputText value="Pick from list with columns"></h:outputText>
+		            </f:facet>
 					<rich:autocomplete
 					autocompleteMethod="#{autoComplete.autocomplete}"
 					mode="ajax" 
 					showButton="true"
 					layout="table"
 					var="data"
-					fetchValue="#{data.name}" 
+					fetchValue="#{data.name} #{data.id}" 
 					id="tag_names"
-					onselectitem="processSelectEvent(event);return false;"
-					value="#{tagCollector.valueName}">
+					value="#{tagCollector.valueName}" converter="NameIdConverter">
 						<rich:column>
 						#{data.name}
 						</rich:column>
 						<rich:column>
 						#{data.id}
 						</rich:column>
-					</rich:autocomplete><br/>
+					</rich:autocomplete>
 					<br/>
-					<h:inputText id="valueId" value="#{tagCollector.valueId}" />
 					<h:commandButton id="addbutton" value="Add">
 						<f:ajax event="click" listener="#{tagCollector.add}"
 							execute="@form" render=":status" />
 					</h:commandButton>			
-				</rich:panel>
+				</rich:panel>				
 		    </h:form>
 			<h:outputText id="status" value="#{tagCollector.status}" />
 		</h:body>
