@@ -12,9 +12,9 @@ import org.vidad.tools.nosql.Mongodb;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class GoogleTaxonomy extends  Taxonomy{
+public class GoogleTaxonomy extends  Taxonomy {
 	transient Logger log = Logger.getLogger(GoogleTaxonomy.class);
-	transient public static final String NAME = "Google Products";
+	transient public static final String NAME = "GoogleProducts";
 	
 	
 	public GoogleTaxonomy() {
@@ -44,12 +44,11 @@ public class GoogleTaxonomy extends  Taxonomy{
 	    reader.close();
 	}
 	
-
 	public static void main(String[] args) throws IOException {
 		Mongodb.getInstance().dropCollection(Collection.TAXONOMY);
 		Mongodb.getInstance().dropCollection(Collection.TERM);
 		GoogleTaxonomy gm = new GoogleTaxonomy();
-		gm.fromFile(Paths.get("/home/moshe/data/taxonomy/taxonomy.en-US-google.csv").toFile());
+		gm.fromFile(Paths.get("/home/moshe/data/vidad/taxonomy/taxonomy.en-US-google.csv").toFile());
 		String trieQuery = "Camera";
 		List<String> res = gm.trie.search(trieQuery);
 		System.out.println(trieQuery + " result value="+res);

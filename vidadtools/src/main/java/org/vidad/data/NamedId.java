@@ -6,6 +6,7 @@ public class NamedId {
 	transient Logger log = Logger.getLogger(NamedId.class);
 
 	String id;
+	String completer;
 	String name;
 	
 	public NamedId(String name) {
@@ -28,10 +29,14 @@ public class NamedId {
 	public void setId(String id) {
 		this.id = id;
 	}
+	public String getCompleter() {
+		return completer;
+	}
+	public void setCompleter(String completer) {
+		this.completer = completer;
+	}
 	@Override
 	public String toString() {
 		return "NamedId [id=" + id + ", name=" + name + "]";
 	}
-	
-	
 }

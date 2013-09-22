@@ -7,10 +7,12 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.vidad.data.Dictionary;
+import org.vidad.data.NamedId;
+import org.vidad.data.taxomony.Taxonomy;
 import org.vidad.tools.conf.Collection;
 import org.vidad.tools.nosql.Mongodb;
 
-public class Autocomplete {
+public class Autocomplete implements Completer{
 	transient Logger log = Logger.getLogger(Autocomplete.class);
 	private Mongodb mongo;
 	private static Autocomplete instance;
@@ -19,7 +21,6 @@ public class Autocomplete {
 	private Autocomplete() {
 		initialize();
 	}
-	
 
 	public static Autocomplete getInstance() {
 		if (null == instance) {
@@ -35,10 +36,51 @@ public class Autocomplete {
 		for(Dictionary d : dictionaries){
 			completers.put("dictionary."+d.name(), d);
 		}
+		List<Taxonomy> taxonomies = mongo.getAllCollectionable(Collection.TAXONOMY, Taxonomy.class);
+		for(Taxonomy t : taxonomies){
+			completers.put("taxonomy."+t.getName(), t);
+		}
 	}
 	
 	public Set<String> listCompleters(){
 		return completers.keySet();
+	}
+
+	/**
+	 * @param prefix
+	 * @return
+	 * @see org.vidad.autocomplete.Completer#autocompEx(java.lang.String)
+	 */
+	@Override
+	public List<NamedId> autocompEx(String prefix) {
+		return null;
+	}
+
+	/**
+	 * @param prefix
+	 * @return
+	 * @see org.vidad.autocomplete.Completer#autocomp(java.lang.String)
+	 */
+	@Override
+	public List<String> autocomp(String prefix) {
+		return null;
+	}
+
+	/**
+	 * @return
+	 * @see org.vidad.autocomplete.Completer#name()
+	 */
+	@Override
+	public String name() {
+		return null;
+	}
+
+	/**
+	 * @param newone
+	 * @see org.vidad.autocomplete.Completer#update(org.vidad.data.NamedId)
+	 */
+	@Override
+	public void update(NamedId newone) {
 	}
 	
 }
