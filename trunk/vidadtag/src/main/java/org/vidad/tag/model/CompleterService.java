@@ -15,6 +15,8 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+
+import org.vidad.autocomplete.Autocomplete;
 import org.vidad.data.NamedId;
 
 /**
@@ -23,15 +25,12 @@ import org.vidad.data.NamedId;
  */
 @ManagedBean
 @ApplicationScoped
-public class AutoComplete implements Serializable {
+public class CompleterService implements Serializable {
 	private static final long serialVersionUID = 9216166934125971050L;
-	transient Logger log = Logger.getLogger(AutoComplete.class);
+	transient Logger log = Logger.getLogger(CompleterService.class);
+	Autocomplete autocomplete = Autocomplete.getInstance();
 	
-	public interface Autocomplete{
-		public List<NamedId> autocomplete(String prefix);
-	}
-	
-	public AutoComplete() {
+	public CompleterService() {
 		
 	}
 
