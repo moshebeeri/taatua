@@ -23,20 +23,21 @@
 		                <h:outputText value="Pick from list with columns"></h:outputText>
 		            </f:facet>
 					<rich:autocomplete
-					autocompleteMethod="#{autoComplete.autocomplete}"
-					mode="ajax" 
-					showButton="true"
-					layout="table"
-					var="data"
-					fetchValue="#{data.name} #{data.id}" 
-					id="tag_names"
-					value="#{tagCollector.valueName}" converter="NameIdConverter">
-						<rich:column>
-						#{data.name}
-						</rich:column>
-						<rich:column>
-						#{data.id}
-						</rich:column>
+						autocompleteMethod="#{autoComplete.autocomplete}"
+						mode="ajax" 
+						showButton="true"
+						layout="table"
+						var="data"
+						fetchValue="#{data.name}" 
+						id="tag_names"
+						value="#{tagCollector.valueName}" 
+						converter="NameIdConverter">
+							<rich:column>
+							#{data.name}
+							</rich:column>
+							<rich:column>
+							#{data.id}
+							</rich:column>
 					</rich:autocomplete>
 					<br/>
 					<h:commandButton id="addbutton" value="Add">

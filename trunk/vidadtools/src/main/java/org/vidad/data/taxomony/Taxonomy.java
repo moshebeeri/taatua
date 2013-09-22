@@ -8,12 +8,14 @@ import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
+import org.vidad.autocomplete.Completer;
 import org.vidad.data.Collectionable;
+import org.vidad.data.NamedId;
 import org.vidad.data.Trie;
 import org.vidad.tools.conf.Collection;
 import org.vidad.tools.nosql.Mongodb;
 
-public abstract class Taxonomy extends Collectionable<Taxonomy>{
+public abstract class Taxonomy extends Collectionable<Taxonomy> implements Completer{
 	transient Logger log = Logger.getLogger(Taxonomy.class);
 	
 	String name;
@@ -39,6 +41,43 @@ public abstract class Taxonomy extends Collectionable<Taxonomy>{
 		for(Term t : all)
 			ret.put(t.getObjectId().toString(), t.name);
 		return ret;
+	}
+	
+	/**
+	 * @param prefix
+	 * @return
+	 * @see org.vidad.autocomplete.Completer#autocompEx(java.lang.String)
+	 */
+	@Override
+	public List<NamedId> autocompEx(String prefix) {
+		return null;
+	}
+
+	/**
+	 * @param prefix
+	 * @return
+	 * @see org.vidad.autocomplete.Completer#autocomp(java.lang.String)
+	 */
+	@Override
+	public List<String> autocomp(String prefix) {
+		return null;
+	}
+
+	/**
+	 * @return
+	 * @see org.vidad.autocomplete.Completer#name()
+	 */
+	@Override
+	public String name() {
+		return getName();
+	}
+
+	/**
+	 * @param newone
+	 * @see org.vidad.autocomplete.Completer#update(org.vidad.data.NamedId)
+	 */
+	@Override
+	public void update(NamedId newone) {
 	}
 	
 	public String getName() {
@@ -149,5 +188,5 @@ public abstract class Taxonomy extends Collectionable<Taxonomy>{
 				child.getValue().print(tabs+1);
 			}
 		}
-	}
+	}	
 }
