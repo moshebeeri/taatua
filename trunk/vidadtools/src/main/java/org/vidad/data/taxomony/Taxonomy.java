@@ -15,7 +15,7 @@ import org.vidad.data.Trie;
 import org.vidad.tools.conf.Collection;
 import org.vidad.tools.nosql.Mongodb;
 
-public abstract class Taxonomy extends Collectionable<Taxonomy> implements Completer{
+public class Taxonomy extends Collectionable<Taxonomy> implements Completer{
 	transient Logger log = Logger.getLogger(Taxonomy.class);
 	
 	String name;
@@ -23,7 +23,9 @@ public abstract class Taxonomy extends Collectionable<Taxonomy> implements Compl
 	Trie trie = new Trie();
 	List<Term> all = new ArrayList<Term>();
 			
-	abstract public Taxonomy fromJson(String json);
+	public Taxonomy fromJson(String json){
+		return gson.fromJson(json, Taxonomy.class);
+	}
 	
 	public Taxonomy(String name) {
 		super();
@@ -43,6 +45,14 @@ public abstract class Taxonomy extends Collectionable<Taxonomy> implements Compl
 		return ret;
 	}
 	
+	public List<Term> getAll() {
+		return all;
+	}
+
+	public Trie getTrie() {
+		return trie;
+	}
+
 	/**
 	 * @param prefix
 	 * @return

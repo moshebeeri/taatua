@@ -133,7 +133,7 @@ public class Dictionary extends Collectionable<Dictionary> implements Completer{
 	
 	
 	public static void main(String[] args) throws IOException, Exception {
-		SpellChecker spellChecker = Dictionary.fromFile("words.english","en", Paths.get("/home/moshe/data/vidad/ftp.cerias.purdue.edu/pub/dict/dictionaries/English/words.english")).
+		SpellChecker spellChecker = Dictionary.fromFile("words","en", Paths.get("/home/moshe/data/vidad/ftp.cerias.purdue.edu/pub/dict/dictionaries/English/words.english")).
 			createSpellChecker();
         String wordForSuggestions = "hello";
         if( !spellChecker.exist(wordForSuggestions) ) {

@@ -23,13 +23,13 @@
 		                <h:outputText value="Pick from list with columns"></h:outputText>
 		            </f:facet>
 					<rich:autocomplete
-						autocompleteMethod="#{autoComplete.autocomplete}"
+						autocompleteMethod="#{completer.autocomplete}"
 						mode="ajax" 
 						showButton="true"
 						layout="table"
 						var="data"
 						fetchValue="#{data.name}" 
-						id="tag_names"
+						id="tagnames_dictionaryen"
 						value="#{tagCollector.valueName}" 
 						converter="NameIdConverter">
 							<rich:column>
