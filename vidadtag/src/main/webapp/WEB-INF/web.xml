@@ -12,7 +12,10 @@
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
-
+	<listener>
+		<listener-class>org.vidad.tag.VidtagServletContextListener</listener-class>
+	</listener>
+	
 	<servlet>
 		<servlet-name>Jersey Web Application rest</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>

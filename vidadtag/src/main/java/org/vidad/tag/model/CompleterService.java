@@ -42,6 +42,7 @@ public class CompleterService implements Serializable {
 //	    	System.out.println("ParameterMap:    " + entry.getKey() + "=" + entry.getValue());
 //		}
     	System.out.println("prefix="+prefix + " resource=" + resource);
+    	autocomplete.complete(prefix, resource);
 		con = null;ec=null;
 		List<NamedId> res = new ArrayList<>();
     	System.out.println("prefix="+prefix);

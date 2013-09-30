@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+  
+  <appender name="async" class="org.apache.log4j.AsyncAppender">
+	  <appender-ref ref="console"/>
+	  <appender-ref ref="fileAppender"/>
+	  <appender-ref ref="flume"/>
+  </appender>
+
+  <!-- Console -->
+  <appender name="console" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+    </layout>
+  </appender>
+  
+  <!-- Rolloing File -->
+   <appender name="fileAppender" class="org.apache.log4j.RollingFileAppender">
+      <param name="MaxFileSize" value="100MB"/>
+      <param name="append" value="false"/>
+      <param name="MaxBackupIndex" value="1"/>
+      <param name="file" value="/opt/vidad/logs/cloudweb.log"/>
+      <layout class="org.apache.log4j.PatternLayout">
+         <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+      </layout>
+   </appender>
+
+	<!-- Flume via Avero -->
+	<appender name="flume" class="org.apache.flume.clients.log4jappender.Log4jAppender">
+	  <param name="Hostname" value="localhost"/>
+	  <param name="Port" value="5140"/>
+	  <layout class="org.apache.log4j.PatternLayout">
+	    <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n"/>
+	  </layout>
+	</appender>
+  
+	<root>
+	  <level value="INFO" />
+	  <appender-ref ref="console"/>
+	  <appender-ref ref="fileAppender"/>
+	  <!-- <appender-ref ref="flume"/> -->
+	</root>
+</log4j:configuration>
+
+
+ 

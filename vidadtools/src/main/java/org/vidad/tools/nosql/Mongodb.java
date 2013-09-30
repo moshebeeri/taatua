@@ -280,14 +280,14 @@ public class Mongodb implements Serializable{
 
 	/**
 	 * @param collection
-	 * @param jsnoStream
+	 * @param jsonStream
 	 * @return
 	 */
 	public ObjectId insertObjectToCollection(DBCollection collection,
-			Collectionable<?> jsnoStream) {
-		String json = jsnoStream.toJson();
+			Collectionable<?> jsonStream) {
+		String json = jsonStream.toJson();
 		DBObject dbo = (DBObject) JSON.parse(json);
-		String className = jsnoStream.getClass().getSimpleName().toLowerCase();
+		String className = jsonStream.getClass().getSimpleName().toLowerCase();
 		return insertJsonIntoCollection(collection, dbo, className);
 	}
 
@@ -307,15 +307,15 @@ public class Mongodb implements Serializable{
 	/**
 	 * @param collection
 	 * @param _id
-	 * @param jsnoStrem
+	 * @param jsonStrem
 	 * @return
 	 */
 	private ObjectId updateObjectToCollection(DBCollection collection,
-			ObjectId _id, Collectionable<?> jsnoStrem){
+			ObjectId _id, Collectionable<?> jsonStrem){
 		BasicDBObject query = new BasicDBObject();
 		query.put("_id", _id);
-		DBObject dbo = (DBObject) JSON.parse(jsnoStrem.toJson());
-		BasicDBObject obj = new BasicDBObject(jsnoStrem.getClass()
+		DBObject dbo = (DBObject) JSON.parse(jsonStrem.toJson());
+		BasicDBObject obj = new BasicDBObject(jsonStrem.getClass()
 				.getSimpleName().toLowerCase(), dbo);
 		collection.update(query, obj);
 		return (ObjectId) obj.get("_id");
