@@ -9,6 +9,10 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/applicationContext.xml</param-value>
 	</context-param>
+	<context-param>
+	  <param-name>org.togglz.core.manager.TogglzConfig</param-name>
+	  <param-value>org.vidad.tag.toggle.TogglesConfig</param-value>
+	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
@@ -51,6 +55,18 @@
 		<servlet-name>Jersey Web Application Tools</servlet-name>
 		<url-pattern>/tools/*</url-pattern>
 	</servlet-mapping>
+
+
+<servlet>
+  <servlet-name>TogglzConsoleServlet</servlet-name>
+  <servlet-class>org.togglz.console.TogglzConsoleServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>TogglzConsoleServlet</servlet-name>
+  <url-pattern>/togglz/*</url-pattern>
+</servlet-mapping>
+
+
 
 	<session-config>
 		<session-timeout>30</session-timeout>
